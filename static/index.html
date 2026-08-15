@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MV 播放器</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ========== 主页:歌单列表 ========== -->
+<div id="home-view">
+  <header id="home-header">
+    <h1>🎬 MV 播放器</h1>
+    <div>
+      <span id="home-nowplaying" hidden></span>
+      <button id="new-pl-btn">＋ 新建歌单</button>
+    </div>
+  </header>
+  <div id="pl-grid"></div>
+  <div id="home-empty" hidden>
+    <p>还没有歌单</p>
+    <p class="sub">点右上角「新建歌单」,然后把你的歌单粘贴进去</p>
+  </div>
+</div>
+
+<!-- ========== 歌单页:播放器 ========== -->
+<div id="layout" hidden>
+  <aside id="sidebar">
+    <div id="pl-head">
+      <button id="back-btn" title="返回主页">←</button>
+      <h1 id="pl-title"></h1>
+      <button id="pl-rename-btn" title="重命名歌单">✎</button>
+    </div>
+
+    <div id="add-box">
+      <textarea id="song-input" rows="4"
+        placeholder="每行一首,格式:歌手 - 歌名&#10;或粘贴 YouTube / Bilibili 视频链接直接添加&#10;或粘贴 Apple Music 歌单链接一键导入"></textarea>
+      <button id="add-btn">添加到歌单</button>
+    </div>
+
+    <div class="list-title">播放列表 <span id="ready-count"></span><span id="drag-hint">(拖拽可调顺序)</span></div>
+    <ul id="song-list"></ul>
+
+    <div class="list-title" id="removed-title" hidden>
+      已剔除 / 失败 <span id="removed-count"></span>
+    </div>
+    <ul id="removed-list"></ul>
+  </aside>
+
+  <main id="player-area">
+    <div id="video-wrap">
+      <video id="video" controls playsinline></video>
+      <div id="empty-hint">
+        <p>👈 先在左侧粘贴你的歌单</p>
+        <p class="sub">下载完成的 MV 会自动进入播放列表</p>
+      </div>
+    </div>
+    <div id="controls">
+      <div id="now-playing">未在播放</div>
+      <div id="buttons">
+        <button id="prev-btn" title="上一首 (←)">⏮</button>
+        <button id="play-btn" title="播放/暂停 (空格)">▶️</button>
+        <button id="next-btn" title="下一首 (→)">⏭</button>
+        <button id="shuffle-btn" class="toggle" title="随机播放">🔀</button>
+        <button id="loop-btn" class="toggle" title="列表循环">🔁</button>
+        <button id="fs-btn" title="全屏 (F)">⛶</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- 通用对话框(替代浏览器 prompt/confirm,避免被拦截) -->
+<dialog id="modal">
+  <form id="modal-form">
+    <div id="modal-title"></div>
+    <div id="modal-msg" hidden></div>
+    <input id="modal-input" type="text" autocomplete="off">
+    <div id="modal-btns">
+      <button type="button" id="modal-cancel">取消</button>
+      <button type="submit" id="modal-ok">确定</button>
+    </div>
+  </form>
+</dialog>
+<div id="toast" hidden></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

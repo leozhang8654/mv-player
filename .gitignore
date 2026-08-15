@@ -1,0 +1,12 @@
+# 视频文件太大,不上传 GitHub(保留在本地 media/ 文件夹)
+media/
+
+# Python 虚拟环境
+.venv/
+
+# macOS 系统文件
+.DS_Store
+
+# Python 缓存
+__pycache__/
+*.pyc

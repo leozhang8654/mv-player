@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mv-player",
+      "runtimeExecutable": "/Users/leozhang/Desktop/MV播放器/.venv/bin/python",
+      "runtimeArgs": ["app.py"],
+      "port": 8471
+    }
+  ]
+}
