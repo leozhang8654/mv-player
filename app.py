@@ -10,6 +10,7 @@ import json
 import os
 import random
 import re
+import socket
 import subprocess
 import threading
 import time
@@ -719,5 +720,21 @@ migrate_zh_subs()
 threading.Thread(target=worker, daemon=True).start()
 threading.Thread(target=media_backfill, daemon=True).start()
 
+def lan_ip():
+    """本机在局域网里的 IP(不真正发包,只是让系统选出口地址)。"""
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        return s.getsockname()[0]
+    except OSError:
+        return None
+    finally:
+        s.close()
+
+
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=PORT, threaded=True)
+    print("本机访问:  http://127.0.0.1:%d" % PORT)
+    ip = lan_ip()
+    if ip:
+        print("同一 Wi-Fi 的手机/iPad 访问:  http://%s:%d" % (ip, PORT))
+    app.run(host="0.0.0.0", port=PORT, threaded=True)
