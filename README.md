@@ -6,9 +6,13 @@
 ## 启动
 
 ```bash
-cd ~/Desktop/MV播放器
+cd ~/MV播放器
 .venv/bin/python app.py
 ```
+
+日常无需手动启动:已配置 macOS 登录启动项(`~/Library/LaunchAgents/com.leozhang.mv-player.plist`),
+开机自动运行、崩溃自动重启。项目实际位于 `~/MV播放器`,桌面上是指向它的替身
+(放在桌面会被 macOS 隐私保护挡住,后台启动项读不了)。
 
 然后浏览器打开 <http://127.0.0.1:8471>。
 
