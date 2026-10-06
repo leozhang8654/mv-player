@@ -19,6 +19,7 @@ import uuid
 
 from flask import Flask, jsonify, request, send_from_directory
 
+import catalog
 import downloader
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -276,7 +277,7 @@ BROWSER_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1
 
 
 def fetch_apple_tracks(url):
-    """从 Apple Music 歌单/专辑页面提取 [(歌手, 歌名), ...]。
+    """从 Apple Music 歌单/专辑页面提取 [(歌手, 歌名, 时长秒), ...]。
 
     嵌入页(embed.music.apple.com)是纯 JS 壳,换成主站同路径页面,
     里面有服务端渲染的 serialized-server-data JSON,歌曲对象带 duration 字段。
@@ -300,7 +301,8 @@ def fetch_apple_tracks(url):
                     key = (o["artistName"].strip(), t.strip())
                     if key not in seen:
                         seen.add(key)
-                        tracks.append(key)
+                        ms = o.get("duration")
+                        tracks.append(key + (round(ms / 1000) if isinstance(ms, (int, float)) and ms > 0 else None,))
             for v in o.values():
                 walk(v)
         elif isinstance(o, list):
@@ -383,13 +385,99 @@ def requeue_due_retries():
     now = time.time()
     changed = False
     for s in state["songs"]:
-        if (s["status"] == "failed" and s.get("auto_retry_at")
-                and s["auto_retry_at"] <= now):
+        if ((s["status"] == "failed" or (s["status"] == "done" and s.get("recheck")))
+                and s.get("auto_retry_at") and s["auto_retry_at"] <= now):
             s["status"] = "pending"
             s["auto_retry_at"] = None
             changed = True
     if changed:
         save_state()
+
+
+def make_progress(song):
+    def on_progress(pct):
+        with lock:
+            song["progress"] = pct
+    return on_progress
+
+
+AUDIT_VERSION = 2
+
+
+def audit_library():
+    """用新的检测规则复查已有结果(每个版本只跑一次):
+
+    - 已下载但标题不符(错歌/合集/制作过程/AI 视频)→ 删除并重新搜索,且不再选它
+    - 已下载但是另一个版本(Acoustic/Live…)→ 重新搜索,原版找不到时保留现有文件
+    - 之前没找到 MV 的 → 按新规则(去后缀、原文名、频道内搜索)再找一次
+    """
+    with lock:
+        todo = [dict(s) for s in state["songs"]
+                if s.get("audit_v", 0) < AUDIT_VERSION and not s.get("forced")]
+    for snap in todo:
+        action = None
+        if snap["status"] == "done" and snap.get("video_url"):
+            title = snap.get("video_title") or ""
+            q = song_query(snap)
+            verdict, _ = downloader.content_verdict(title, q)
+            if verdict == "reject" and "catalog" not in snap:
+                ensure_catalog(snap)  # 可能只是缺原文名,补查后再判一次
+                q = song_query(snap)
+                verdict, _ = downloader.content_verdict(title, q)
+            if verdict == "reject":
+                action = "drop"
+            elif downloader.variant_words(title, q):
+                action = "recheck"
+        elif snap["status"] in ("no_mv", "review"):
+            action = "recheck"
+        with lock:
+            for s in state["songs"]:
+                if s["id"] != snap["id"]:
+                    continue
+                if "catalog" in snap:
+                    s.setdefault("catalog", snap["catalog"])
+                s["audit_v"] = AUDIT_VERSION
+                if s["status"] not in ("done", "no_mv", "review"):
+                    break  # 期间已被重新排队/处理
+                if action == "drop":
+                    rejected = s.setdefault("rejected_urls", [])
+                    if s["video_url"] not in rejected:
+                        rejected.append(s["video_url"])
+                    drop_static_media(s)
+                if action:
+                    s["status"] = "pending"
+                    s["progress"] = 0
+            save_state()
+    wake.set()
+
+
+def static_backfill():
+    """检查历史下载里的静态画面视频,排队重新找真正的 MV(找不到则删除,标记无 MV)。"""
+    with lock:
+        # 旧版本保留下来的静态视频:已经搜过没有更好的,直接删
+        for s in state["songs"]:
+            if s["status"] == "done" and s.get("static") and not s.get("forced"):
+                drop_static_media(s)
+                s["status"] = "no_mv"
+        save_state()
+        todo = [dict(s) for s in state["songs"]
+                if s["status"] == "done" and s.get("video_file")
+                and not s.get("forced") and not s.get("motion_checked")]
+    for snap in todo:
+        static = downloader.is_static_video(os.path.join(MEDIA_DIR, snap["video_file"]))
+        with lock:
+            for s in state["songs"]:
+                if s["id"] != snap["id"] or s["status"] != "done":
+                    continue
+                s["motion_checked"] = True
+                s["static"] = static
+                if static and s.get("video_url"):
+                    rejected = s.setdefault("rejected_urls", [])
+                    if s["video_url"] not in rejected:
+                        rejected.append(s["video_url"])
+                    s["status"] = "pending"
+            save_state()
+        wake.set()
 
 
 def worker():
@@ -419,65 +507,204 @@ def worker():
             time.sleep(3)
 
 
+MAX_STATIC_SKIPS = 3  # 下到静态画面后最多换几个候选
+
+
+def _finish_download(song, path, url):
+    """新视频已确认可用:替换旧成品,生成封面/响度/字幕并标记完成。"""
+    old = song.get("video_file")
+    if old and old != os.path.basename(path):
+        try:
+            os.remove(os.path.join(MEDIA_DIR, old))
+        except OSError:
+            pass
+    subs = collect_subs(song["id"])
+    video_file = rename_to_label(song, path)
+    thumb_ok = make_thumb(song["id"], video_file)
+    loudness = measure_loudness(video_file)
+    with lock:
+        song["status"] = "done"
+        song["progress"] = 100
+        song["video_file"] = video_file
+        song["thumb"] = thumb_ok
+        song["loudness"] = loudness
+        song["subs"] = subs
+        song["static"] = False
+        song["motion_checked"] = True
+        song["recheck"] = False
+        song["retry_count"] = 0
+        song["auto_retry_at"] = None
+        save_state()
+
+
+def drop_static_media(song):
+    """删掉静态画面视频及其封面/字幕(调用方需持锁)。"""
+    cleanup_song_media(song["id"], song.get("video_file"))
+    song["video_file"] = None
+    song["thumb"] = False
+    song["subs"] = []
+    song["static"] = False
+
+
+def _set_status(song, status, **fields):
+    with lock:
+        song["status"] = status
+        song.update(fields)
+        save_state()
+
+
+def ensure_catalog(song):
+    """查一次 iTunes 拿参考时长和原文名;网络失败就跳过,下次处理时再查。"""
+    if "catalog" in song:
+        return
+    try:
+        cat = catalog.lookup(song["title"], song["artist"])
+    except Exception:
+        return
+    with lock:
+        song["catalog"] = cat or {}
+        save_state()
+
+
+def song_query(song):
+    return downloader.SongQuery(
+        song["title"], song["artist"], song.get("catalog"), song.get("duration"),
+        downloader.get_settings().get("allow_variant", True))
+
+
+def remember_channel(entry, q):
+    """自动选中的视频来自歌手本人频道 → 记住频道 id,同歌手的歌以后先在频道内搜。"""
+    cid, name = entry.get("channel_id"), entry.get("channel") or entry.get("uploader")
+    if not cid or not name:
+        return
+    with lock:
+        chans = state.setdefault("artist_channels", {})
+        for key in downloader.artist_channel_keys(name, q):
+            chans[key] = {"id": cid, "name": name}
+
+
+def known_channels(song, q):
+    """该歌手已知的官方频道 [(id, 名称)]。
+
+    没记录过时,从库里找一首同歌手、且来自歌手本人频道的已下载歌,查一次它的频道 id。
+    """
+    chans = state.setdefault("artist_channels", {})
+    keys = [downloader._norm(a) for a in q.artists]
+    if not any(k in chans for k in keys):
+        with lock:
+            peers = [s for s in state["songs"]
+                     if s is not song and s["status"] == "done" and s.get("channel")
+                     and "youtu" in (s.get("video_url") or "")
+                     and downloader.artist_channel_keys(s["channel"], q)]
+        for peer in peers[:1]:
+            info = None
+            try:
+                info = downloader.fetch_video_info(peer["video_url"])
+            except Exception:
+                pass
+            with lock:
+                for key in downloader.artist_channel_keys(peer["channel"], q):
+                    # 查不到也记下(id 为空),避免同歌手的每首歌都去查一遍
+                    chans[key] = {"id": (info or {}).get("channel_id"), "name": peer["channel"]}
+                save_state()
+    out = []
+    for k in keys:
+        info = chans.get(k)
+        if info and info.get("id") and (info["id"], info["name"]) not in out:
+            out.append((info["id"], info["name"]))
+    return out
+
+
+def _candidate(score, entry, source):
+    return {"url": downloader._entry_url(entry), "title": entry.get("title"),
+            "channel": entry.get("channel") or entry.get("uploader"),
+            "duration": entry.get("duration"), "thumbnail": entry.get("thumbnail"),
+            "score": score, "source": source}
+
+
+def _file_exists(song):
+    return bool(song.get("video_file")) and os.path.exists(os.path.join(MEDIA_DIR, song["video_file"]))
+
+
+VIDEO_FIELDS = ("video_url", "video_title", "channel", "source", "score")
+
+
 def process_song(song):
+    # 复查已有视频时,下载失败要能恢复成原来的样子
+    before = {k: song.get(k) for k in VIDEO_FIELDS}
     try:
         if song.get("forced") and song.get("video_url"):
-            # 用户手动指定的链接:跳过搜索直接下载
+            # 用户手动指定/确认的链接:跳过搜索直接下载,静态画面也照收
             url = song["video_url"]
-            source, score, video_title = "manual", None, song.get("video_title")
-        else:
-            best = downloader.find_mv(song["title"], song["artist"], SOURCES)
-            if best is None or best[0] < downloader.ACCEPT_THRESHOLD:
-                with lock:
-                    song["status"] = "no_mv"
-                    save_state()
-                return
-            score, entry, source = best
-            url = entry.get("url") or entry.get("webpage_url")
-            video_title = entry.get("title")
-            song["channel"] = entry.get("channel") or entry.get("uploader")
-        with lock:
-            song["status"] = "downloading"
-            song["progress"] = 0
-            song["source"] = source
-            song["score"] = score
-            song["video_title"] = video_title
-            song["video_url"] = url
-            save_state()
-
-        def on_progress(pct):
+            _set_status(song, "downloading", progress=0, source="manual", score=None,
+                        candidates=None)
+            path = downloader.download(url, MEDIA_DIR, song["id"], make_progress(song))
+            _finish_download(song, path, url)
+            return
+        if song.get("static"):
+            # 静态画面旧文件不要了,先删再找真正的 MV
             with lock:
-                song["progress"] = pct
-
-        # 换版本重下时先清掉旧成品文件
-        if song.get("video_file"):
-            try:
-                os.remove(os.path.join(MEDIA_DIR, song["video_file"]))
-            except OSError:
-                pass
-        path = downloader.download(url, MEDIA_DIR, song["id"], on_progress)
-        subs = collect_subs(song["id"])
-        video_file = rename_to_label(song, path)
-        thumb_ok = make_thumb(song["id"], video_file)
-        loudness = measure_loudness(video_file)
+                drop_static_media(song)
+                save_state()
+        ensure_catalog(song)
+        q = song_query(song)
+        rejected = song.setdefault("rejected_urls", [])
+        ranked = downloader.search_mv(q, SOURCES, exclude=set(rejected),
+                                      channels=known_channels(song, q))
+        accepted = [c for c in ranked if c[0] >= downloader.ACCEPT_THRESHOLD]
+        for score, entry, source in accepted[:MAX_STATIC_SKIPS]:
+            url = downloader._entry_url(entry)
+            fields = dict(source=source, score=score, video_title=entry.get("title"),
+                          video_url=url, channel=entry.get("channel") or entry.get("uploader"),
+                          candidates=None, error=None)
+            if url == song.get("video_url") and _file_exists(song):
+                # 复查时选中的就是现有文件,不用重下
+                _set_status(song, "done", progress=100, recheck=False, **fields)
+                remember_channel(entry, q)
+                return
+            _set_status(song, "downloading", progress=0, **fields)
+            # 先下到 <id>.mp4,确认不是静态画面才替换旧成品
+            path = downloader.download(url, MEDIA_DIR, song["id"], make_progress(song))
+            if not downloader.is_static_video(path):
+                _finish_download(song, path, url)
+                remember_channel(entry, q)
+                return
+            # 一张封面配音频,不算 MV:删掉,排除这个链接后换下一个候选
+            downloader.cleanup_song_files(MEDIA_DIR, song["id"])
+            with lock:
+                rejected.append(url)
+                song["status"] = "searching"
+                save_state()
+        review = [_candidate(*c) for c in ranked
+                  if c[0] >= downloader.REVIEW_MIN
+                  and downloader._entry_url(c[1]) not in rejected][:3]
+        if review and any(c["url"] == song.get("video_url") for c in review) and _file_exists(song):
+            # 复查:现有视频仍在候选里且没有更好的 → 保持原样
+            _set_status(song, "done", progress=100, recheck=False)
+            return
         with lock:
-            song["status"] = "done"
-            song["progress"] = 100
-            song["video_file"] = video_file
-            song["thumb"] = thumb_ok
-            song["loudness"] = loudness
-            song["subs"] = subs
-            song["retry_count"] = 0
-            song["auto_retry_at"] = None
+            if song.get("video_file"):
+                drop_static_media(song)
+            # 没有可用视频了:清掉旧视频信息,免得界面上还显示错的标题
+            song.update(video_url=None, video_title=None, channel=None, score=None)
             save_state()
+        if review:
+            # 有像样但不够确定的候选:交给用户在「待确认」里挑
+            _set_status(song, "review", candidates=review)
+        else:
+            _set_status(song, "no_mv", candidates=None)
     except Exception as e:
         global cooldown_until
         msg = str(e)
-        bot_check = "Sign in to confirm" in msg or "not a bot" in msg
-        transient = (bot_check or "HTTP Error 403" in msg
+        bot_check = getattr(e, "bot_check", False) or "Sign in to confirm" in msg or "not a bot" in msg
+        transient = (getattr(e, "transient", False) or bot_check or "HTTP Error 403" in msg
                      or "Connection reset" in msg or "timed out" in msg)
         with lock:
-            song["status"] = "failed"
+            if not song.get("forced") and _file_exists(song) and song.get("video_url"):
+                # 复查/换版本时失败:原视频还在,先恢复可播放,到点再自动复查
+                song.update(before, status="done", progress=100, recheck=True)
+            else:
+                song["status"] = "failed"
             if bot_check:
                 # 整个队列冷却一段时间,别让后面的歌挨个撞墙
                 cooldown_until = time.time() + BOT_COOLDOWN
@@ -485,8 +712,7 @@ def process_song(song):
                 # 暂时性故障,定时自动重试:15分钟起,逐次翻倍,最多8轮
                 song["retry_count"] = song.get("retry_count", 0) + 1
                 wait_min = min(60, 15 * (2 ** (song["retry_count"] - 1)))
-                cause = ("YouTube 触发人机验证(下载太频繁被暂时限制)" if bot_check
-                         else "下载被 YouTube 中途拒绝(临时限流)")
+                cause = msg[:180]
                 if song["retry_count"] <= 8:
                     song["auto_retry_at"] = time.time() + wait_min * 60
                     msg = "%s,约 %d 分钟后自动重试;也可点 ↻ 立即试" % (cause, wait_min)
@@ -511,6 +737,45 @@ def index():
 def api_state():
     with lock:
         return jsonify(state)
+
+
+def local_settings_request():
+    # 登录状态属于运行后台的 Mac；不允许局域网或跨站页面更改它。
+    from urllib.parse import urlparse
+    if request.remote_addr not in ("127.0.0.1", "::1"):
+        return False
+    if urlparse(request.host_url).hostname not in ("localhost", "127.0.0.1", "::1"):
+        return False
+    origin = request.headers.get("Origin")
+    return not origin or origin == request.host_url.rstrip("/")
+
+
+@app.route("/api/download-settings", methods=["GET", "POST"])
+def api_download_settings():
+    if not local_settings_request():
+        return jsonify({"error": "请在运行 MV 播放器的 Mac 上打开下载设置"}), 403
+    if request.method == "POST":
+        try:
+            settings = downloader.save_settings(request.get_json(silent=True))
+        except (ValueError, TypeError) as e:
+            return jsonify({"error": str(e)}), 400
+        return jsonify(settings)
+    return jsonify({**downloader.get_settings(), "warning": downloader.account_warning})
+
+
+connection_check_lock = threading.Lock()
+
+
+@app.route("/api/download-settings/check", methods=["POST"])
+def api_check_download():
+    if not local_settings_request():
+        return jsonify({"error": "请在运行 MV 播放器的 Mac 上检测连接"}), 403
+    if not connection_check_lock.acquire(blocking=False):
+        return jsonify({"error": "正在检测连接，请稍候"}), 409
+    try:
+        return jsonify(downloader.check_connection())
+    finally:
+        connection_check_lock.release()
 
 
 # ---------- 歌单 ----------
@@ -580,8 +845,8 @@ def api_add_songs(pl_id):
         m = APPLE_URL_RE.search(line)
         if m:
             try:
-                entries.extend({"artist": a, "title": t}
-                               for a, t in fetch_apple_tracks(m.group(0)))
+                entries.extend({"artist": a, "title": t, "duration": d}
+                               for a, t, d in fetch_apple_tracks(m.group(0)))
             except Exception as e:
                 errors.append("Apple Music 导入失败: %s" % e)
             continue
@@ -631,6 +896,7 @@ def api_add_songs(pl_id):
                     "source": None,
                     "error": None,
                     "thumb": False,
+                    "duration": item.get("duration"),
                 }
                 state["songs"].append(song)
                 by_key[key] = song
@@ -681,11 +947,37 @@ def api_set_url(song_id):
     return jsonify({"error": "歌曲不存在"}), 404
 
 
+@app.route("/api/songs/<song_id>/choose", methods=["POST"])
+def api_choose_candidate(song_id):
+    """「待确认」的歌:用户选定一个候选(url),或都不要(url 为空 → 标记无 MV)。"""
+    url = (request.get_json(silent=True) or {}).get("url")
+    with lock:
+        for s in state["songs"]:
+            if s["id"] != song_id:
+                continue
+            if s["status"] != "review":
+                return jsonify({"error": "这首歌不在待确认状态"}), 409
+            if not url:
+                s["status"] = "no_mv"
+                s["candidates"] = None
+                save_state()
+                return jsonify({"ok": True})
+            cand = next((c for c in s.get("candidates") or [] if c["url"] == url), None)
+            if cand is None:
+                return jsonify({"error": "不是候选视频"}), 400
+            s.update(video_url=url, video_title=cand.get("title"), channel=cand.get("channel"),
+                     forced=True, status="pending", progress=0, error=None, candidates=None)
+            save_state()
+            wake.set()
+            return jsonify({"ok": True})
+    return jsonify({"error": "歌曲不存在"}), 404
+
+
 @app.route("/api/songs/<song_id>/retry", methods=["POST"])
 def api_retry_song(song_id):
     with lock:
         for s in state["songs"]:
-            if s["id"] == song_id and s["status"] in ("no_mv", "failed"):
+            if s["id"] == song_id and s["status"] in ("no_mv", "failed", "review"):
                 s["status"] = "pending"
                 s["progress"] = 0
                 s["error"] = None
@@ -714,12 +1006,6 @@ def migrate_zh_subs():
         save_state()
 
 
-load_state()
-migrate_filenames()
-migrate_zh_subs()
-threading.Thread(target=worker, daemon=True).start()
-threading.Thread(target=media_backfill, daemon=True).start()
-
 def lan_ip():
     """本机在局域网里的 IP(不真正发包,只是让系统选出口地址)。"""
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -733,6 +1019,12 @@ def lan_ip():
 
 
 if __name__ == "__main__":
+    load_state()
+    migrate_filenames()
+    migrate_zh_subs()
+    threading.Thread(target=worker, daemon=True).start()
+    threading.Thread(target=media_backfill, daemon=True).start()
+    threading.Thread(target=lambda: (audit_library(), static_backfill()), daemon=True).start()
     print("本机访问:  http://127.0.0.1:%d" % PORT)
     ip = lan_ip()
     if ip:

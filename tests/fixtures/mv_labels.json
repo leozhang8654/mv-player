@@ -1,0 +1,1858 @@
+[
+ {
+  "artist": "M83",
+  "title": "Midnight City",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=dX3k_QDnzHE",
+    "title": "M83 'Midnight City' Official video",
+    "channel": "M83"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Martin Garrix",
+  "title": "Pressure (feat. Tove Lo)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=U4dilE1eh9s",
+    "title": "Martin Garrix feat. Tove Lo - Pressure (Official Video)",
+    "channel": "Martin Garrix"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Martin Garrix & David Guetta",
+  "title": "So Far Away (feat. Jamie Scott & Romy Dya)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=o7iL2KzDh38",
+    "title": "Martin Garrix & David Guetta - So Far Away (Official Video) feat. Jamie Scott & Romy Dya",
+    "channel": "Martin Garrix"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "John Newman",
+  "title": "Love Me Again",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=CfihYWRWRTQ",
+    "title": "John Newman - Love Me Again",
+    "channel": "John Newman"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Sam Gellaitry",
+  "title": "Assumptions",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=EAwYvhJinoI",
+    "title": "sam gellaitry -  duo (official music video)",
+    "channel": "sam gellaitry",
+    "why": "错歌:duo"
+   }
+  ],
+  "expect": "unknown",
+  "static": []
+ },
+ {
+  "artist": "d4vd",
+  "title": "Feel It (From The Original Series “Invincible”)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=vZi8ET9k11g",
+    "title": "d4vd - Feel It (Official Music Video)",
+    "channel": "d4vd"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "The Weeknd & Madonna",
+  "title": "Popular (feat. Playboi Carti)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=vt0i6nuqNEo",
+    "title": "The Weeknd, Madonna, Playboi Carti - Popular (Official Music Video)",
+    "channel": "The Weeknd"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "The Weeknd",
+  "title": "Blinding Lights",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=4NRXx6U8ABQ",
+    "title": "The Weeknd - Blinding Lights (Official Video)",
+    "channel": "The Weeknd"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Army of Lovers",
+  "title": "Crucified",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=ptfZ3IPkAOY",
+    "title": "Army of Lovers - Crucified (Official Music Video)",
+    "channel": "RHINO"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Tommy Richman",
+  "title": "MILLION DOLLAR BABY",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=Zf1d8SGuxfs",
+    "title": "Tommy Richman - MILLION DOLLAR BABY (Official Music Video)",
+    "channel": "Tommy Richman"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "M. Fischer & XYPO",
+  "title": "We Can Be Together",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=-auMGeacgUU"
+  ]
+ },
+ {
+  "artist": "Childish Gambino",
+  "title": "Heartbeat",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=dFVxGRekRSg",
+    "title": "Childish Gambino - Heartbeat",
+    "channel": "Donald Glover"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Dance Fruits Music & Steve Void",
+  "title": "Toosie Slide",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=xWggTb45brM",
+    "title": "Drake - Toosie Slide (Official Music Video)",
+    "channel": "Drake",
+    "why": "别的歌手(原唱 Drake)的 MV,不应自动下载"
+   }
+  ],
+  "expect": "unknown",
+  "static": []
+ },
+ {
+  "artist": "The Weeknd",
+  "title": "Starboy (feat. Daft Punk)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=34Na4j8AVgA",
+    "title": "The Weeknd - Starboy ft. Daft Punk (Official Video) ft. Daft Punk",
+    "channel": "The Weeknd"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "VALORANT Music & bbno$",
+  "title": "in my zone",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=SzWm5FvlqXM",
+    "title": "bbno$, VALORANT - in my zone",
+    "channel": "bbnogames"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Pharoahe Monch & th1rt3en",
+  "title": "Kill Kill Kill (feat. Smithsoneon)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=4bHy0en1luI",
+    "title": "th1rt3en - Kill, Kill, Kill [Official Music Video]",
+    "channel": "Channel Th1rt3en"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Bring Me The Horizon",
+  "title": "Can You Feel My Heart",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=QJJYpsA5tv8",
+    "title": "Bring Me The Horizon - Can You Feel My Heart",
+    "channel": "Bring Me The Horizon"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Frizk",
+  "title": "All My Fellas",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=iruW5Ow0gtE",
+    "title": "How I made ALL MY FELLAS",
+    "channel": "Frizk",
+    "why": "制作过程视频"
+   }
+  ],
+  "expect": "unknown",
+  "static": []
+ },
+ {
+  "artist": "Kendrick Lamar",
+  "title": "PRIDE.",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=J87pJrxvJ5E",
+   "https://www.youtube.com/watch?v=pRGmFiEyr0A"
+  ]
+ },
+ {
+  "artist": "Kendrick Lamar",
+  "title": "LOVE. (feat. Zacari)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=ox7RsX1Ee34",
+    "title": "Kendrick Lamar - LOVE. ft. Zacari",
+    "channel": "Kendrick Lamar"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "5 Seconds of Summer",
+  "title": "Teeth",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=JWeJHN5P-E8",
+    "title": "5 Seconds of Summer - Teeth (Official Video)",
+    "channel": "5SOS"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "OneRepublic",
+  "title": "Counting Stars",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=hT_nvWreIhg",
+    "title": "OneRepublic - Counting Stars",
+    "channel": "OneRepublic"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Fitz and The Tantrums",
+  "title": "Out of My League",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=Z4mbxaa3XL8",
+    "title": "Fitz And The Tantrums - Out Of My League [Official Music Video]",
+    "channel": "Fitz and the Tantrums"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "bbno$ & Ironmouse",
+  "title": "1-800",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=6Ro7NubzE9A",
+    "title": "bbno$ - 1-800 (ft. ironmouse)",
+    "channel": "bbno$ and ironmouse"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "The RAH Band",
+  "title": "Messages from the Stars",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=l6IYK2nhMFE",
+    "title": "The RAH Band - Messages From The Stars - \"Starstruck\" Animation",
+    "channel": "The RAH Band"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "ISOxo",
+  "title": "Inhuman",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=K1CMAv9lkn8",
+    "title": "ISOxo - inhuman (Official Music Video)",
+    "channel": "NIGHTMODE"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "The Weeknd",
+  "title": "After Hours",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=oq9AgxHvGjw",
+    "title": "The Weeknd - After Hours (Short Film)",
+    "channel": "The Weeknd"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Benson Boone",
+  "title": "Beautiful Things",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=Oa_RSwwpPaA",
+    "title": "Benson Boone - Beautiful Things (Official Music Video)",
+    "channel": "Benson Boone"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "The Weeknd",
+  "title": "Die For You",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=uPD0QOGTmMI",
+    "title": "The Weeknd - Die For You",
+    "channel": "The Weeknd"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "BLACKPINK",
+  "title": "JUMP",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=CgCVZdcKcqY",
+    "title": "BLACKPINK - ‘뛰어(JUMP)’ M/V",
+    "channel": "BLACKPINK"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Sub Urban",
+  "title": "Cradles",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=KBtk5FUeJbk",
+    "title": "Sub Urban - Cradles [Official Music Video]",
+    "channel": "Sub Urban"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Alan Aztec",
+  "title": "Disco Panzer (feat. R5on11c)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=uRSAatLI2QY",
+    "title": "Alan Aztec - Disco Panzer (feat. R5on11c)",
+    "channel": "Alan Aztec"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Alan Aztec",
+  "title": "BassMarck (feat. R5on11c)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=XjrPJRwY3s0",
+    "title": "Alan Aztec - BassMarck (feat. R5on11c)",
+    "channel": "Alan Aztec"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "АДЛИН",
+  "title": "Dead Inside",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=HhQNzo2iTN4",
+    "title": "Dead Inside (Shoulder Meme Compilation)",
+    "channel": "АДЛИН",
+    "why": "梗图合集"
+   }
+  ],
+  "expect": "unknown",
+  "static": []
+ },
+ {
+  "artist": "24kGoldn",
+  "title": "Mood (feat. iann dior)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=GrAchTdepsU",
+    "title": "24kGoldn - Mood (Official Video) ft. iann dior",
+    "channel": "24kGoldn"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Rentz",
+  "title": "Alone",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=GV5pJkze_W4",
+    "title": "Rentz - Alone",
+    "channel": "Illumi Music"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Fall Out Boy",
+  "title": "Centuries",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=LBr7kECsjcQ",
+    "title": "Fall Out Boy - Centuries (Official Video)",
+    "channel": "Fall Out Boy"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Fall Out Boy",
+  "title": "Uma Thurman",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=2VTxYQL2SbA",
+    "title": "Fall Out Boy - Uma Thurman (Official Music Video)",
+    "channel": "Fall Out Boy"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Avicii",
+  "title": "Waiting For Love",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=cHHLHGNpCSA",
+    "title": "Avicii - Waiting For Love",
+    "channel": "Avicii"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Alan Walker",
+  "title": "Faded",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=60ItHLz5WEA",
+    "title": "Alan Walker - Faded",
+    "channel": "Alan Walker"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Lady Gaga",
+  "title": "Poker Face",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=bESGLojNYSo",
+    "title": "Lady Gaga - Poker Face (Official Music Video)",
+    "channel": "Lady Gaga"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Crystal Waters",
+  "title": "Gypsy Woman (She's Homeless) (La Da Dee La Da Da) [Basement Boy Strip To The Bone Mix]",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=_KztNIg4cvE",
+    "title": "Crystal Waters - Gypsy Woman (She's Homeless) (Official Music Video)",
+    "channel": "Crystal Waters"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": [
+   "https://www.youtube.com/watch?v=ojncAZyiIIM"
+  ]
+ },
+ {
+  "artist": "Niko B",
+  "title": "Why's this dealer?",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=uu_89gGq6NM",
+    "title": "Why’s this dealer? OUT NOW!",
+    "channel": "Niko B",
+    "why": "20 秒预告短片",
+    "duration": 20
+   }
+  ],
+  "expect": "unknown",
+  "static": []
+ },
+ {
+  "artist": "Glass Animals",
+  "title": "The Other Side of Paradise",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=cpJ5JIscnLs",
+    "title": "Glass Animals - The Other Side Of Paradise (Official Video)",
+    "channel": "Glass Animals"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Crystal Castles",
+  "title": "Kerosene",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=qR2QIJdtgiU",
+    "title": "Crystal Castles \"KEROSENE\" Official",
+    "channel": "Crystal Castles official"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Crystal Castles",
+  "title": "Vanished",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=6e6Hj7MwWaI",
+    "title": "Crystal Castles - Vanished",
+    "channel": "LastGangRadio"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "DAKOOKA",
+  "title": "Умри, если меня не любишь",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=q1SbKKlVfpA",
+   "https://www.youtube.com/watch?v=-xSpOhuBxHE"
+  ]
+ },
+ {
+  "artist": "Feint",
+  "title": "Fading Wind",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=KL8_r-OHZuY"
+  ]
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "They Don't Care About Us",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=QNJL6nfu__Q",
+    "title": "Michael Jackson - They Don't Care About Us",
+    "channel": "Michael Jackson"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=t1pqi8vjTLY",
+    "title": "Michael Jackson - They Don't Care About Us (Prison Version) (Official Video)",
+    "channel": "Michael Jackson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Bad (2012 Remaster)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=dsUXAEzaC3Q",
+    "title": "",
+    "channel": ""
+   }
+  ],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=crbFmpezO4A",
+    "title": "Michael Jackson - Leave Me Alone (Official Video)",
+    "channel": "Michael Jackson",
+    "why": "错歌:Leave Me Alone"
+   }
+  ],
+  "expect": "mv",
+  "static": [
+   "https://www.youtube.com/watch?v=-DlMoJ2V6uk"
+  ]
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Beat It",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=oRdxUFDoQe0",
+    "title": "Michael Jackson - Beat It (Official 4K Video)",
+    "channel": "Michael Jackson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Thriller",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=4V90AmXnguw",
+    "title": "Michael Jackson - Thriller (Official Video - Shortened Version)",
+    "channel": "Michael Jackson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "TK from Ling tosite sigure",
+  "title": "Unravel",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=Fve_lHIPa-I",
+    "title": "TK from 凛として時雨 『unravel』 Music Video(Full Size)",
+    "channel": "凛として時雨 / TK"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Clean Bandit",
+  "title": "Rather Be (feat. Jess Glynne)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=m-M1AtrxztU",
+    "title": "Clean Bandit - Rather Be ft. Jess Glynne [Official Video]",
+    "channel": "Clean Bandit"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "blackwave. & Konteks",
+  "title": "Bittersweet Baby",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=mteqxMEmH90",
+    "title": "blackwave., Konteks - Bittersweet Baby (prod. Konteks)",
+    "channel": "blackwave."
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Bruno Mars",
+  "title": "That's What I Like",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=PMivT7MJ41M",
+    "title": "Bruno Mars - That’s What I Like [Official Music Video]",
+    "channel": "Bruno Mars"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Billie Jean",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=Zi_XLOBDo_Y",
+    "title": "Michael Jackson - Billie Jean (Official Video)",
+    "channel": "Michael Jackson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "PSY",
+  "title": "Gangnam Style",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=9bZkp7q19f0",
+    "title": "PSY - GANGNAM STYLE(강남스타일) M/V",
+    "channel": "officialpsy"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "The Kid LAROI & Justin Bieber",
+  "title": "STAY",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=kTJczUoc26U",
+    "title": "The Kid LAROI, Justin Bieber - STAY (Official Video)",
+    "channel": "The Kid LAROI."
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "FIFTY FIFTY",
+  "title": "Cupid (Twin Version)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=Qc7_zRjH808",
+    "title": "FIFTY FIFTY (피프티피프티) - 'Cupid'  Official MV",
+    "channel": "FIFTY FIFTY Official"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Hikaru Utada",
+  "title": "One Last Kiss",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=0Uhh62MUEic",
+    "title": "宇多田ヒカル『One Last Kiss』",
+    "channel": "Hikaru Utada"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Pharrell Williams",
+  "title": "Happy (From \"Despicable Me 2\")",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=y6Sxv-sUYtM",
+    "title": "Pharrell Williams - Happy (Official Music Video)",
+    "channel": "iamOTHER"
+   }
+  ],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=C7dPqrmDWxs",
+    "title": "Pharrell Williams - Happy (from Despicable Me 2) [Ballroom Version]",
+    "channel": "Pharrell Williams",
+    "why": "Ballroom 版"
+   }
+  ],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Lulleaux",
+  "title": "Empty Love (feat. Kid Princess)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=n3AQydPdlNs",
+    "title": "Lulleaux - Empty Love (feat. Kid Princess)",
+    "channel": "Lulleaux"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Mark Ronson",
+  "title": "Uptown Funk (feat. Bruno Mars)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=OPf0YbXqDm0",
+    "title": "Mark Ronson - Uptown Funk (Official Video) ft. Bruno Mars",
+    "channel": "Mark Ronson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Katy Perry",
+  "title": "California Gurls (feat. Snoop Dogg)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=F57P9C4SAW4",
+    "title": "Katy Perry - California Gurls (Official Music Video) ft. Snoop Dogg",
+    "channel": "Katy Perry"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Aaron Smith",
+  "title": "Dancin (feat. Luvli) [Krono Remix]",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=6Nb-prB-4P0",
+    "title": "Aaron Smith - Dancin - Krono Remix (Official Video) ft. Luvli",
+    "channel": "AaronSmithVEVO"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Luis Fonsi & Daddy Yankee",
+  "title": "Despacito",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=kJQP7kiw5Fk",
+    "title": "Luis Fonsi - Despacito ft. Daddy Yankee",
+    "channel": "Luis Fonsi"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Rick Astley",
+  "title": "Never Gonna Give You Up",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "title": "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)",
+    "channel": "Rick Astley"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Justin Bieber",
+  "title": "Peaches (feat. Daniel Caesar & GIVĒON)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=tQ0yjYUFKAE",
+    "title": "Justin Bieber - Peaches ft. Daniel Caesar, Giveon",
+    "channel": "Justin Bieber"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Lynyrd Skynyrd",
+  "title": "Free Bird",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=MQNRKX8GwPo",
+    "title": "Lynyrd Skynyrd - Free Bird",
+    "channel": "Lynyrd Skynyrd"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Chicago",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": []
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Love Never Felt So Good",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=GJDdBbgJafU",
+    "title": "Michael Jackson - Love Never Felt So Good (Official Video)",
+    "channel": "Michael Jackson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Xscape",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=94EAFH_OyOE",
+    "title": "Michael Jackson – Xscape (AI Music Video)",
+    "channel": "Michael Jackson The Music",
+    "why": "粉丝 AI 视频"
+   }
+  ],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=O3Zj8GMby3o"
+  ]
+ },
+ {
+  "artist": "JAWNY",
+  "title": "Honeypie",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=Wgw6tJ8yz9M",
+    "title": "JAWNY - Honeypie (Official Video)",
+    "channel": "JAWNY"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "The Chainsmokers",
+  "title": "Closer (feat. Halsey)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=0zGcUoRlhmw",
+    "title": "The Chainsmokers - Closer (Official Video) ft. Halsey",
+    "channel": "The Chainsmokers"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Oliver Tree",
+  "title": "Life Goes On",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=8F2s8ivKXNY",
+    "title": "Oliver Tree - Life Goes On [Music Video]",
+    "channel": "Oliver Tree"
+   }
+  ],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=DR-Lfe56Ks0",
+    "title": "Oliver Tree - Life Goes On (Acoustic) [Official Music Video]",
+    "channel": "Oliver Tree",
+    "why": "Acoustic 版"
+   }
+  ],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Eurythmics",
+  "title": "Sweet Dreams (Are Made of This)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=qeMFqkcPYcg",
+    "title": "Eurythmics, Annie Lennox, Dave Stewart - Sweet Dreams (Are Made Of This) (Official Video)",
+    "channel": "Eurythmics"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Black or White",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=F2AitTPI5U0",
+    "title": "Michael Jackson - Black Or White (Official Video - Shortened Version)",
+    "channel": "Michael Jackson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Doja Cat",
+  "title": "Like That (feat. Gucci Mane)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=XEJLuJyxLDE",
+    "title": "Doja Cat - Like That (Official Video) ft. Gucci Mane",
+    "channel": "Doja Cat"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Oliver Tree & Robin Schulz",
+  "title": "Miss You (Bonus Track)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=BX0lKSa_PTk",
+    "title": "Oliver Tree & Robin Schulz - Miss You [Official Music Video]",
+    "channel": "Oliver Tree"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "ABBA",
+  "title": "Gimme! Gimme! Gimme! (A Man After Midnight)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=XEjLoHdbVeE",
+    "title": "ABBA - Gimme! Gimme! Gimme! (A Man After Midnight)",
+    "channel": "ABBA"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Jack Stauber",
+  "title": "Buttercup",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=e2qG5uwDCW4"
+  ]
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Dirty Diana",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=yUi_S6YWjZw",
+    "title": "Michael Jackson - Dirty Diana (Official Video)",
+    "channel": "Michael Jackson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Rock with You (Single Version)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=5X-Mrc2l1d0",
+    "title": "Michael Jackson - Rock With You (Official Video - Upscaled)",
+    "channel": "Michael Jackson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Don't Stop 'Til You Get Enough",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=yURRmWtbTbo",
+    "title": "Michael Jackson - Don't Stop 'Til You Get Enough (Official Video - Upscaled)",
+    "channel": "Michael Jackson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Michael Jackson",
+  "title": "Smooth Criminal (2012 Remaster)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=h_D3VFfhvs4",
+    "title": "Michael Jackson - Smooth Criminal (Official Video)",
+    "channel": "Michael Jackson"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=sFvENQBc-F8",
+    "title": "Michael Jackson - Smooth Criminal (Official Video - Shortened Version)",
+    "channel": "Michael Jackson"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Madnap",
+  "title": "Slow Down (feat. Pauline Herr)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=1pajp5qx0Wg",
+    "title": "Madnap - Slow Down (ft. Pauline Herr) (Official Music Video)",
+    "channel": "Thrive Music"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "The RAH Band",
+  "title": "Winter Love",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=vY9JdAcM_Ok",
+    "title": "The RAH Band - Clouds Across The Moon (Official AI Video)",
+    "channel": "The RAH Band",
+    "why": "错歌:Clouds Across The Moon"
+   }
+  ],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=2rHWdO30pFQ",
+   "https://www.youtube.com/watch?v=lLV0PT3nMT8",
+   "https://www.youtube.com/watch?v=ENRmdJNW--0"
+  ]
+ },
+ {
+  "artist": "TYSM",
+  "title": "Normal No More",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=LgaY5a-Z9KE",
+    "title": "Normal No More - TYSM & @felixsnow [OFFICIAL VISUALIZER]",
+    "channel": "TYSM MUSIC"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "EKKSTACY",
+  "title": "i walk this earth all by myself",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=vD9AbG8otzM",
+    "title": "EKKSTACY - i walk this earth all by myself (Dir. @tabsofjoy) [Official Music Video]",
+    "channel": "EKKSTACY"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "IMASE",
+  "title": "NIGHT DANCER",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=kagoEGKHZvU",
+    "title": "【imase】NIGHT DANCER（MV）",
+    "channel": "imase"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Malcolm Todd",
+  "title": "Roommates",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=YRGtgkN-8QU",
+    "title": "Roommates - Malcolm Todd (Music Video)",
+    "channel": "Malcolm Todd"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Malcolm Todd",
+  "title": "Earrings",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=a4tdS3IB294",
+    "title": "Malcolm Todd - Earrings (Official Visualizer)",
+    "channel": "Malcolm Todd"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Malcolm Todd",
+  "title": "Sweet Boy",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=14OBXAjgj7U",
+    "title": "Sweet Boy - Malcolm Todd (Music Video)",
+    "channel": "Malcolm Todd"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Prep",
+  "title": "As It Was",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=h-Yiku4Al48",
+    "title": "PREP - Who's Got You Singing Again (Official Video)",
+    "channel": "PREP",
+    "why": "错歌:Who's Got You Singing Again"
+   }
+  ],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=fn4JAuCfHQA"
+  ]
+ },
+ {
+  "artist": "Nelly",
+  "title": "Dilemma (feat. Kelly Rowland)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=8WYHDfJDPDc",
+    "title": "Nelly - Dilemma (Official Music Video) ft. Kelly Rowland",
+    "channel": "Nelly"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "George Michael",
+  "title": "Careless Whisper",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=izGwDsrQ1eQ",
+    "title": "George Michael - Careless Whisper (Official Video)",
+    "channel": "George Michael"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Daft Punk, Pharrell Williams & Nile Rodgers",
+  "title": "Get Lucky",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": []
+ },
+ {
+  "artist": "KUN",
+  "title": "Deadman",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=TPyS382hHYM",
+    "title": "KUN - Deadman (Official Video)",
+    "channel": "KUN 蔡徐坤"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "JVKE",
+  "title": "this is what winter feels like",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=RXheZNz-BqA",
+    "title": "JVKE - this is what autumn feels like x this is what winter feels like (perfect transition)",
+    "channel": "JVKE",
+    "why": "串烧过渡"
+   }
+  ],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=qo6DjDkafSg"
+  ]
+ },
+ {
+  "artist": "Walk Off the Earth",
+  "title": "Bet On Me (feat. D Smoke) [Organic Version]",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=0PRi4DTLaz8"
+  ]
+ },
+ {
+  "artist": "She Her Her Hers",
+  "title": "Episode 33",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=3o1RdY_j3aA",
+    "title": "She Her Her Hers - s (Music Video)",
+    "channel": "She Her Her Hers ",
+    "why": "错歌:s"
+   }
+  ],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=RmuOzcb2nkI",
+   "https://www.youtube.com/watch?v=PHhKAKjqw-4"
+  ]
+ },
+ {
+  "artist": "Earth, Wind & Fire",
+  "title": "September",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=Gs069dndIYk",
+    "title": "Earth, Wind & Fire - September (Official HD Video)",
+    "channel": "Earth Wind & Fire"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Gotye",
+  "title": "Somebody That I Used to Know (feat. Kimbra)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=8UVNT4wvIGY",
+    "title": "Gotye - Somebody That I Used To Know (feat. Kimbra) [Official Music Video]",
+    "channel": "Gotye"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Charlie Puth",
+  "title": "We Don’t Talk Anymore (feat. Selena Gomez)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=3AtDnEC4zak",
+    "title": "Charlie Puth - We Don't Talk Anymore (feat. Selena Gomez) [Official Video]",
+    "channel": "Charlie Puth"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Ice Paper",
+  "title": "心如止水",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=gWC-emUS8UM",
+    "title": "Ice Paper【心如止水】HD 高清官方歌词版MV",
+    "channel": "太合音樂 Taihe Music-精選"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Dabeull",
+  "title": "Cosmic Fonk (feat. Rude Jude)",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=8rv6mo8KYFM"
+  ]
+ },
+ {
+  "artist": "Dabeull",
+  "title": "Touch (feat. Isadora)",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=rOd-UfU5xgM",
+   "https://www.youtube.com/watch?v=__xJ-47MLJk"
+  ]
+ },
+ {
+  "artist": "Dabeull",
+  "title": "Glitter Fonk (feat. Holybrune)",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=55CCmVTk7ko",
+   "https://www.youtube.com/watch?v=1TBTyzK_FAA",
+   "https://www.youtube.com/watch?v=WQP3TqjftVM"
+  ]
+ },
+ {
+  "artist": "Dabeull",
+  "title": "On Time (feat. Kunta)",
+  "good": [],
+  "bad": [],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=M8XyPfhZARg"
+  ]
+ },
+ {
+  "artist": "A Touch of Class",
+  "title": "Around the World (La La La La La) [Radio Version]",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=Se237UXFKlQ",
+    "title": "A Touch Of Class - Around the World (La La La La La) (Official Video)",
+    "channel": "ATC - A Touch of Class"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "JVKE",
+  "title": "golden hour",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=PEM0Vs8jf1w",
+    "title": "JVKE - golden hour (official music video)",
+    "channel": "JVKE"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Seal",
+  "title": "Kiss From a Rose (2024 Remaster)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=hDd2G_V1rzc",
+    "title": "Seal - Kiss From A Rose (Official Video) [HD]",
+    "channel": "Seal"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=Kwdweif1YI0",
+    "title": "Seal - Kiss From A Rose [Seal Version] (Official Video) [HD]",
+    "channel": "Seal"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": [
+   "https://www.youtube.com/watch?v=_2PCtLXWdbY"
+  ]
+ },
+ {
+  "artist": "Dominic Fike",
+  "title": "Babydoll",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=KqMOKCRgvD8",
+    "title": "Babydoll",
+    "channel": "Dominic Fike"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "AURORA",
+  "title": "Cure For Me",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=K17df81RL9Y",
+    "title": "AURORA - Cure For Me",
+    "channel": "AURORA"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Zella Day",
+  "title": "East of Eden",
+  "good": [],
+  "bad": [
+   {
+    "url": "https://www.youtube.com/watch?v=pySSdwwx204",
+    "title": "Zella Day - Hypnotic (Official Video)",
+    "channel": "Zella Day",
+    "why": "错歌:Hypnotic"
+   }
+  ],
+  "expect": "unknown",
+  "static": [
+   "https://www.youtube.com/watch?v=go2b07t18mo"
+  ]
+ },
+ {
+  "artist": "Vicetone",
+  "title": "Nevada (feat. Cozi Zuehlsdorff) [Slowed + Reverb]",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=ue8LChnwHQM",
+    "title": "Vicetone - Nevada (Slowed + Reverb) feat. Cozi Zuehlsdorff",
+    "channel": "Vicetone"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Tez Cadey",
+  "title": "Seve (Radio Edit)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=MDt1Ed_Qwlo",
+    "title": "Tez Cadey - Seve (Official Video)",
+    "channel": "Tez Cadey"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Carly Rae Jepsen",
+  "title": "Call Me Maybe",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=KsXvSpMdlFo",
+    "title": "Carly Rae Jepsen - Call Me Maybe OFFICIAL VIDEO HQ",
+    "channel": "CarlyRaeJepsen OfficialVEVO"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Maroon 5",
+  "title": "Payphone (feat. Wiz Khalifa)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=KRaWnd3LJfs",
+    "title": "Maroon 5 - Payphone ft. Wiz Khalifa (Explicit) (Official Music Video)",
+    "channel": "Maroon 5"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Imagine Dragons",
+  "title": "Believer",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=7wtfhZwyrcc",
+    "title": "Imagine Dragons - Believer (Official Music Video)",
+    "channel": "ImagineDragons"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "YOASOBI",
+  "title": "Gunjou",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=Y4nEEZwckuU",
+    "title": "",
+    "channel": ""
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Ed Sheeran",
+  "title": "Shape of You",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=JGwWNGJdvx8",
+    "title": "Ed Sheeran - Shape of You (Official Music Video)",
+    "channel": "Ed Sheeran"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Backstreet Boys",
+  "title": "I Want It That Way",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=4fndeDfaWCg",
+    "title": "Backstreet Boys - I Want It That Way (Official HD Video)",
+    "channel": "Backstreet Boys"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Sam Smith",
+  "title": "Too Good at Goodbyes",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=J_ub7Etch2U",
+    "title": "Sam Smith - Too Good At Goodbyes",
+    "channel": "SAM SMITH"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "DNCE",
+  "title": "Cake By the Ocean",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=vWaRiD5ym74",
+    "title": "DNCE - Cake By The Ocean",
+    "channel": "DNCE"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Pandora",
+  "title": "Trust Me",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=j7A-4NEyqZ8",
+    "title": "Pandora - Trust Me (1993) Official Music Video",
+    "channel": "DJ. Zsori. Eurodance Official!"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Maroon 5",
+  "title": "Sugar",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=09R8_2nJtjg",
+    "title": "Maroon 5 - Sugar (Official Music Video)",
+    "channel": "Maroon 5"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Jamiroquai",
+  "title": "Virtual Insanity",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=4JkIs37a2JE",
+    "title": "Jamiroquai - Virtual Insanity (Official Video)",
+    "channel": "Jamiroquai Official"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "Gorillaz & De La Soul",
+  "title": "Feel Good Inc. (feat. David Jolicoeur, Kelvin Mercer & Vincent Mason)",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=HyHNuVaZJ-k",
+    "title": "Gorillaz - Feel Good Inc. (Official Video)",
+    "channel": "Gorillaz"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ },
+ {
+  "artist": "twenty one pilots",
+  "title": "Stressed Out",
+  "good": [
+   {
+    "url": "https://www.youtube.com/watch?v=pXRviuL6vMY",
+    "title": "twenty one pilots: Stressed Out [OFFICIAL VIDEO]",
+    "channel": "Fueled By Ramen and twenty one pilots"
+   }
+  ],
+  "bad": [],
+  "expect": "mv",
+  "static": []
+ }
+]

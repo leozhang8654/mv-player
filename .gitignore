@@ -10,3 +10,13 @@ media/
 # Python 缓存
 __pycache__/
 *.pyc
+
+# 本机浏览器下载偏好（不保存 Cookie）
+download-settings.json
+download-settings.json.tmp
+
+# App 打包产物(源码在 desktop/Sources/,用 desktop/build.sh 重建)
+desktop/build/
+
+# 搜索结果缓存(离线评估用,tools/eval_mv.py)
+search-cache/
