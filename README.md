@@ -1,112 +1,173 @@
+<div align="center">
+
+<img src="docs/images/icon.png" width="112" alt="MV 播放器图标">
+
 # MV 播放器
 
-把歌单粘贴进来,自动从网上下载每首歌的官方 MV;找不到官方 MV 的歌会被自动剔除。
-支持多个歌单、拖拽排序,播放时显示 MV。仅供个人使用。
+**把歌单变成 MV 播放列表。**
+粘贴歌名或 Apple Music 歌单,自动找到并下载每首歌的官方 MV,像听歌一样连续播放。
 
-## 启动
+[![最新版本](https://img.shields.io/github/v/release/leozhang8654/mv-player?label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&color=a855f7)](https://github.com/leozhang8654/mv-player/releases/latest)
+[![下载量](https://img.shields.io/github/downloads/leozhang8654/mv-player/total?label=%E4%B8%8B%E8%BD%BD%E9%87%8F&color=ec4899)](https://github.com/leozhang8654/mv-player/releases)
+[![平台](https://img.shields.io/badge/%E5%B9%B3%E5%8F%B0-macOS%20%7C%20Windows-6366f1)](#-下载安装)
+[![构建](https://github.com/leozhang8654/mv-player/actions/workflows/release.yml/badge.svg)](https://github.com/leozhang8654/mv-player/actions/workflows/release.yml)
 
-在「应用程序」或启动台里双击 **MV 播放器** 就行,独立窗口打开,不用开浏览器。
-App 启动时会自己确认后台服务在跑:已经在跑就直接连,没在跑就拉起来。
+[<img src="https://img.shields.io/badge/macOS-Apple%20%E8%8A%AF%E7%89%87-111827?style=for-the-badge&logo=apple&logoColor=white" alt="下载 macOS Apple 芯片版">](https://github.com/leozhang8654/mv-player/releases/latest/download/MVPlayer-macOS-AppleSilicon.dmg)
+[<img src="https://img.shields.io/badge/macOS-Intel-111827?style=for-the-badge&logo=apple&logoColor=white" alt="下载 macOS Intel 版">](https://github.com/leozhang8654/mv-player/releases/latest/download/MVPlayer-macOS-Intel.dmg)
+[<img src="https://img.shields.io/badge/Windows-%E5%AE%89%E8%A3%85%E7%89%88-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="下载 Windows 安装版">](https://github.com/leozhang8654/mv-player/releases/latest/download/MVPlayer-Windows-x64-Setup.exe)
 
-后台服务本身仍由 macOS 登录启动项(`~/Library/LaunchAgents/com.leozhang.mv-player.plist`)
-常驻,开机自动运行、崩溃自动重启,所以关掉 App 窗口不影响正在进行的下载。
-项目实际位于 `~/MV播放器`,桌面上是指向它的替身
-(放在桌面会被 macOS 隐私保护挡住,后台启动项读不了)。
+</div>
 
-也可以照旧用浏览器开 <http://127.0.0.1:8471>。
+<p align="center">
+  <img src="docs/images/screenshot-player.png" alt="MV 播放器:播放界面" width="100%">
+</p>
 
-同一 Wi-Fi 下的手机 / iPad / 其他电脑,访问 `http://<本机IP>:8471`
-(地址在 App 的「帮助 → 拷贝手机访问地址」里一键拷走;首次启动 macOS
-若弹出防火墙提示,选「允许」即可)。
+## ✨ 功能亮点
 
-### App 的菜单
+| | |
+|---|---|
+| 📋 **一键导入** | 每行一首「歌手 - 歌名」,或直接粘贴 Apple Music 歌单链接、YouTube / Bilibili 视频链接 |
+| 🎯 **只要官方 MV** | 多重检测:歌名必须对得上、识别官方频道与推广号、区分 Live / Acoustic / Remix 等版本、对照原曲时长、剔除「一张封面配音频」的静态视频 |
+| 🌏 **多语言歌名** | 自动查原文名:「Gunjou」能找到 YOASOBI「群青」,繁简体互通 |
+| 🤔 **不确定就问你** | 拿不准的结果进入「待确认」,给出候选让你预览、挑选,不会悄悄下错 |
+| 🎬 **专注播放** | 连续播放、随机 / 循环、拖拽排序、音量响度均衡、字幕、全屏 |
+| 📚 **多歌单管理** | 同一首歌加入多个歌单只下载一次;移出所有歌单后自动清理文件 |
+| 📱 **手机也能看** | 同一 Wi-Fi 下,手机 / iPad 用浏览器打开就能播放 |
+| 🔒 **本地优先** | 视频保存在你自己的电脑上,离线可看;不需要注册、不收集任何数据 |
 
-- **播放**:播放/暂停 ⌘P、上一首 ⌘←、下一首 ⌘→、视频全屏 ⌘F、随机 / 循环。
-  页面本身的空格、←/→、F 照常可用。
-- **显示**:重新载入 ⌘R、放大 ⌘+ / 缩小 ⌘- / 实际大小 ⌘0、窗口全屏 ⌃⌘F。
-- **编辑**:⌘V 粘贴歌单靠它,别删。
-- **帮助**:在浏览器中打开、拷贝手机访问地址、打开项目文件夹、查看服务日志。
-- **MV 播放器 → 重启后台服务**:下载卡住时用,会 `launchctl kickstart` 重开服务。
+## 📸 截图
 
-## 使用
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/screenshot-home.png" alt="主页:歌单"></td>
+    <td width="50%"><img src="docs/images/screenshot-review.png" alt="待确认:从候选中挑选"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>主页</b> · 歌单封面由 MV 画面拼成</td>
+    <td align="center"><b>待确认</b> · 拿不准时由你来选</td>
+  </tr>
+</table>
 
-- **主页**:歌单卡片一览(封面为 MV 截帧拼图)。「＋ 新建歌单」创建;悬停卡片可重命名(铅笔)/ 删除(垃圾桶),点封面上的播放键直接从第一首开始播。
-- **歌单页**:粘贴歌单(每行一首,`歌手 - 歌名`,可只写歌名/带编号),点「添加到歌单」自动搜索下载。
-- **排序**:直接拖拽歌曲行,或用 ↑/↓ 按钮;顺序即播放顺序,自动保存。
-- **播放**:点击就绪的歌开始播,播完自动下一首;支持随机 🔀 / 循环 🔁 / 全屏。
-  快捷键:空格 播放/暂停,←/→ 切歌,F 全屏。
-- 同一首歌加进多个歌单只下载一次;从所有歌单移除后文件自动清理。
-- 「未找到官方MV」的歌进入下方剔除区,可 ↻ 重试。
-- **待确认**:找到了像样但不够确定的视频时(例如只有别的歌手的同名 MV),歌曲显示「待确认」。
-  点 ☑ 查看最多 3 个候选,可「预览」后选一个下载,或选「都不是」。
-- 匹配错了可点 🔗 手动指定视频链接;手动指定的链接不做任何检查,直接下载。
+<sub>截图使用演示数据(渐变色合成视频),不含真实 MV 画面。</sub>
 
-### YouTube 账号与下载设置
+## 📦 下载安装
 
-- 在 Chrome 登录你的 YouTube 账号（普通免费账号即可，不需要 Premium 会员），然后打开播放器的「下载设置」。默认从 Chrome 读取登录状态，搜索、视频和字幕请求都使用同一配置。
-- 登录的作用：减少「请证明你不是机器人」的人机验证、能下载年龄限制的视频。画质上限 1080p，免费账号和会员一样。仅限会员 / 频道会员观看的视频无法下载。
-- 不登录（选「不使用账号」，或读取登录状态失败）也能用：搜索照常，但下载更容易被人机验证拦下，失败的歌会定时自动重试。
-- 如果 Chrome 有多个配置，在 `chrome://version` 查看「个人资料路径」，将最后一段（例如 `Default` 或 `Profile 1`）填入配置名称。留空由 yt-dlp 自动选择。
-- 「保存并检测连接」会检查一个公开 MV 的解析和可用格式，不保存视频。修改对后续请求生效，失败歌曲可点 ↻ 重试。
-- 读取浏览器失败时会提示原因并尝试未登录下载公开内容。如果提示 macOS 拒绝访问，需要在「系统设置 → 隐私与安全性」允许后台下载程序读取浏览器数据，再通过 App 菜单重启后台服务。浏览器未登录、配置选错或钥匙串权限不足也可能导致读取失败。
-- 设置只保存浏览器及配置名称到本机 `download-settings.json`，不导出或保存 Cookie。局域网设备不能更改本机账号设置。
-- YouTube Premium 自带的离线内容只能在 YouTube 内使用，不能直接导入此播放器；这里仍通过 yt-dlp 下载可访问的视频。参见 [YouTube 离线下载说明](https://support.google.com/youtube/answer/11977233) 与 [yt-dlp 账号说明](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies)。
+前往 [**最新版本**](https://github.com/leozhang8654/mv-player/releases/latest) 下载对应安装包:
 
-下载失败时先点「检测连接」。下载引擎应保持更新：
+| 系统 | 安装包 | 要求 |
+|---|---|---|
+| macOS · Apple 芯片(M1 及以后) | [`MVPlayer-macOS-AppleSilicon.dmg`](https://github.com/leozhang8654/mv-player/releases/latest/download/MVPlayer-macOS-AppleSilicon.dmg) | macOS 12 及以上 |
+| macOS · Intel 芯片 | [`MVPlayer-macOS-Intel.dmg`](https://github.com/leozhang8654/mv-player/releases/latest/download/MVPlayer-macOS-Intel.dmg) | macOS 12 及以上 |
+| Windows · 安装版 | [`MVPlayer-Windows-x64-Setup.exe`](https://github.com/leozhang8654/mv-player/releases/latest/download/MVPlayer-Windows-x64-Setup.exe) | Windows 10 / 11(64 位) |
+| Windows · 便携版 | [`MVPlayer-Windows-x64.zip`](https://github.com/leozhang8654/mv-player/releases/latest/download/MVPlayer-Windows-x64.zip) | 解压即用,无需安装 |
 
-```bash
-brew upgrade yt-dlp deno
-```
+安装包已附带全部所需组件(yt-dlp、FFmpeg、Deno),无需另外安装;下载组件 yt-dlp 会每天自动更新。
 
-视频下载完成后检查文件同时包含音视频流；字幕单独获取，字幕失败不会使视频下载失败。
+<details>
+<summary><b>macOS:首次打开提示「无法验证开发者」怎么办?</b></summary>
 
-## 工作原理
-
-- 先用 iTunes Search API 查这首歌的参考时长和原文名(如「Gunjou」→「群青」、
-  「TK from Ling tosite sigure」→「TK from 凛として時雨」),结果存在歌曲的 `catalog` 字段。
-- 已知歌手官方频道时先在频道内搜;再用 `yt-dlp` 搜「歌手 歌名 official MV」、原文名等,
-  逐级降级到纯歌名;YouTube 之后备选 Bilibili。频道 id 记在 `library.json` 的 `artist_channels`。
-- 打分规则(`downloader.py`):
-  - **歌名硬门槛**:视频标题里必须整词出现歌名(或原文名),否则直接否决,任何加分都救不回来。
-    Remaster / Radio Edit / Single Version / From "…" 等后缀匹配时忽略;
-    Remix / Version 等特别版找不到时可退而用原版 MV(扣分,「下载设置」里可关闭)。
-  - **非 MV 内容否决**:标题去掉歌手和歌名后剩下「How I made / Compilation / Meme / Transition /
-    AI Video / Teaser …」等直接否决。
-  - **版本扣分**:Acoustic / Live / Remix / Ballroom 等请求里没有的版本词、或 feat. 了请求里没有的歌手,扣分,
-    原版存在时一定让位。
-  - **频道可信度**:歌手本人频道(含 Official / VEVO 写法、合办频道)加分;只是包含歌手名
-    (如「某某 Fan France」)罚一半;粉丝 / 歌词频道重罚;认证账号不罚。
-  - **时长**:与 iTunes 参考时长对照,片段、合集、长篇电影版扣分。
-  - 标题和频道都看不到歌手的结果(如翻唱请求搜到原唱 MV)最多进「待确认」,不自动下载。
-- 下载后检测画面:每 5 秒取一帧比对,画面基本不动(一张封面配音频)就删除并换下一个候选。
-- 下载优先 1080p H.264 mp4,完成后用 ffmpeg 截帧生成封面。
-- 视频在 `media/`,封面在 `media/thumbs/`,歌单与状态在 `library.json`,重启后保留。
-
-## 检测规则的回归测试
-
-- `tests/fixtures/mv_labels.json`:库里每首歌人工标注的正确 / 错误视频。
-- `python3 -m unittest discover -s tests` 里的 `LabelTests` 离线检查:标注正确的视频必须通过内容检查,
-  标注错误的必须被否决或低于下载线。
-- `python3 tools/eval_mv.py`:重放 `search-cache/` 里缓存的搜索结果,统计「下对 / 下错 / 待确认 / 漏掉」,
-  改打分规则后先跑一遍,不用重新请求 YouTube。缓存由后台下载自动记录;
-  `--online` 会为缺缓存的歌联网补齐(较慢,有节流)。
-
-## 打包成 App
-
-App 外壳是一个原生 Swift + WKWebView 程序,源码在 `desktop/Sources/`,
-本身不含业务逻辑——只负责开窗口、起服务、补菜单栏。改完重新打包:
+本应用未经 Apple 公证。把 App 拖进「应用程序」后,打开「终端」执行一次:
 
 ```bash
-./desktop/build.sh /Applications
+xattr -dr com.apple.quarantine /Applications/MV播放器.app
 ```
 
-不带参数只产出到 `desktop/build/`,带目录参数则额外装过去。
-脚本会顺带用 AppKit 画出图标(`desktop/Sources/MakeIcon.swift`)并做本机 ad-hoc 签名。
-App 靠 `Info.plist` 里的 `MVProjectRoot` 找到项目目录,所以挪动 `~/MV播放器` 之后要重新打包。
+之后双击即可正常打开。也可以在被拦截后前往「系统设置 → 隐私与安全性」,在页面底部点「仍要打开」。
 
-## 依赖
+</details>
 
-- Python 3.9+(项目自带 `.venv`,已装 Flask)
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp)、Deno 与 ffmpeg（包含 ffprobe，已通过 Homebrew 安装）
+<details>
+<summary><b>Windows:提示「Windows 已保护你的电脑」怎么办?</b></summary>
 
-回归检查：`.venv/bin/python -m unittest discover -s tests -v`。
+安装程序未做代码签名,SmartScreen 会提示。点「更多信息 → 仍要运行」即可。
+首次启动若 Windows 防火墙询问,允许「专用网络」即可让同一 Wi-Fi 的手机访问。
+Windows 版启动后会在浏览器中打开播放器,关闭黑色的命令行窗口即退出。
+
+</details>
+
+## 🚀 快速上手
+
+1. **新建歌单**:主页点「新建歌单」。
+2. **粘贴歌曲**:每行一首,例如
+   ```
+   YOASOBI - 群青
+   The Weeknd - Blinding Lights
+   周杰伦 - 晴天
+   ```
+   也可以直接粘贴 Apple Music 歌单链接(需公开分享),一次导入整个歌单。
+3. **等待下载**:每首歌自动搜索并下载官方 MV,下载完成即进入播放列表;点击任意一首开始播放。
+4. **处理待确认**:显示「待确认」的歌点 ☑,预览候选后选一个,或选「都不是」。
+   匹配错了也可以点 🔗 手动指定视频链接。
+
+**快捷键**:空格 播放 / 暂停 · ← / → 上一首 / 下一首 · F 全屏。
+macOS 版另有菜单栏:⌘P 播放 / 暂停、⌘← / ⌘→ 切歌、⌘F 视频全屏、⌘+ / ⌘- 缩放。
+
+**数据位置**:曲库与视频保存在 macOS「影片 / MV播放器」、Windows「视频\MV播放器」文件夹。
+卸载程序不会删除它们。
+
+## 🔑 YouTube 账号(可选)
+
+不登录也能使用。若下载频繁遇到「请证明你不是机器人」,可在浏览器中登录 YouTube,
+然后在播放器的「下载设置」里选择该浏览器:
+
+- **普通免费账号即可**,不需要 YouTube Premium。登录只用于减少人机验证、下载年龄限制的视频。
+- 画质上限 1080p,免费账号与会员相同;仅限会员观看的视频无法下载。
+- 播放器只在本机读取浏览器的登录状态,不导出、不保存 Cookie;局域网中的其他设备不能修改此设置。
+- macOS 首次读取 Chrome 登录状态时会请求钥匙串权限,选择「允许」即可。
+- Windows 上建议使用 **Firefox**:新版 Chrome / Edge 对登录信息做了额外加密,下载工具无法读取。
+
+## ❓ 常见问题
+
+<details>
+<summary><b>为什么有的歌显示「未找到官方 MV」?</b></summary>
+
+不少歌曲本身没有官方 MV,只有音频、歌词版或现场版。播放器宁可不下,也不会拿翻唱、合集、
+静态封面视频来凑数。确定有 MV 的话,可点 ↻ 重试,或点 🔗 手动指定链接。
+
+</details>
+
+<details>
+<summary><b>下载失败 / 一直在重试?</b></summary>
+
+多半是 YouTube 的人机验证。打开「下载设置」点「保存并检测连接」查看原因;登录 YouTube 账号通常能解决。
+失败的歌会在 15 分钟后起自动重试,也可以点 ↻ 立即重试。
+
+</details>
+
+<details>
+<summary><b>手机怎么访问?</b></summary>
+
+手机和电脑连同一个 Wi-Fi,在手机浏览器打开 `http://<电脑的局域网 IP>:8471`。
+macOS 版可在菜单「帮助 → 拷贝手机访问地址」一键拷贝;Windows 版启动窗口里会显示该地址。
+
+</details>
+
+<details>
+<summary><b>需要一直开着吗?</b></summary>
+
+下载在播放器运行时进行;关闭后,未完成的歌下次启动会继续。已下载的视频随时可看。
+
+</details>
+
+## 🛠 从源码运行
+
+```bash
+git clone https://github.com/leozhang8654/mv-player.git && cd mv-player
+brew install yt-dlp ffmpeg deno                # 下载工具
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+.venv/bin/python app.py                        # 打开 http://127.0.0.1:8471
+```
+
+项目结构、MV 检测原理、测试与离线评估、打包与发布流程见 [开发与部署说明](docs/DEVELOPMENT.md)。
+
+## ⚠️ 免责声明
+
+本项目是供个人学习与研究使用的本地播放工具,不提供、不托管、不分发任何音视频内容。
+所有视频均由用户自行从公开平台获取,版权归原权利人所有。使用时请遵守 YouTube、Bilibili
+等平台的服务条款及所在地区的版权法律,勿用于任何商业或侵权用途。
+
+## 🙏 致谢
+
+基于以下优秀的开源项目:[yt-dlp](https://github.com/yt-dlp/yt-dlp) ·
+[FFmpeg](https://ffmpeg.org) · [Deno](https://deno.com) · [Flask](https://flask.palletsprojects.com) ·
+[OpenCC](https://github.com/yichen0831/opencc-python)。各组件许可证见 [第三方组件说明](THIRD_PARTY_NOTICES.md)。
