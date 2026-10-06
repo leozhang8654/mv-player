@@ -1,0 +1,2 @@
+# 第三方语言文件,不计入仓库语言统计
+packaging/windows/*.isl linguist-vendored
