@@ -19,8 +19,12 @@ const STATUS_TEXT = {
   searching: ["搜索官方MV…", "busy"],
   done: ["✓ 就绪", "ok"],
   no_mv: ["未找到官方MV", "err"],
+  review: ["待确认 · 点击从候选里选一个", "pick"],
   failed: ["下载失败", "err"],
 };
+
+const icon = (name) => `<svg class="ic" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+const EQ = `<span class="eq"><i></i><i></i><i></i></span>`;
 
 function escapeHtml(s) {
   return String(s || "").replace(/[&<>"']/g, (c) => ({
@@ -97,6 +101,61 @@ function toast(msg) {
   toastTimer = setTimeout(() => { t.hidden = true; }, 3000);
 }
 
+/* ---------- 下载账号与连接检测 ---------- */
+async function downloadSettingsRequest(path, options) {
+  const res = await fetch(path, options);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "请求失败");
+  return data;
+}
+
+document.querySelectorAll(".download-settings-btn").forEach((button) => {
+  button.addEventListener("click", async () => {
+    try {
+      const data = await downloadSettingsRequest("/api/download-settings");
+      $("download-browser").value = data.browser;
+      $("download-profile").value = data.profile;
+      $("download-allow-variant").checked = data.allow_variant !== false;
+      $("download-browser").dispatchEvent(new Event("change"));
+      $("download-check-result").textContent = data.warning || "保存后对后续请求生效；检测通常需要几十秒。";
+      $("download-settings").showModal();
+    } catch (err) { toast(err.message); }
+  });
+});
+$("download-browser").addEventListener("change", () => {
+  $("download-profile").disabled = ["none", "safari"].includes($("download-browser").value);
+});
+$("download-settings-close").onclick = () => $("download-settings").close();
+
+async function saveDownloadSettings(check) {
+  const buttons = [$("download-settings-save"), $("download-settings-check")];
+  buttons.forEach((b) => { b.disabled = true; });
+  $("download-check-result").textContent = check ? "正在保存并检测连接…" : "正在保存…";
+  try {
+    await downloadSettingsRequest("/api/download-settings", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        browser: $("download-browser").value, profile: $("download-profile").value,
+        allow_variant: $("download-allow-variant").checked,
+      }),
+    });
+    if (check) {
+      const result = await downloadSettingsRequest("/api/download-settings/check", { method: "POST" });
+      $("download-check-result").textContent = (result.ok ? "✓ " : "检测失败：") + result.message +
+        (result.warning ? "\n" + result.warning : "");
+    } else {
+      $("download-check-result").textContent = "已保存。可检测连接，或回到歌单重试失败歌曲。";
+    }
+  } catch (err) {
+    $("download-check-result").textContent = err.message;
+  } finally { buttons.forEach((b) => { b.disabled = false; }); }
+}
+$("download-settings-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  saveDownloadSettings(false);
+});
+$("download-settings-check").onclick = () => saveDownloadSettings(true);
+
 function plSongs(plId) {
   const pl = plById(plId);
   return pl ? pl.song_ids.map((id) => songsById[id]).filter(Boolean) : [];
@@ -164,23 +223,28 @@ $("pl-rename-btn").onclick = () => { if (viewPl) renamePlaylist(viewPl); };
 
 let lastHomeKey = "";
 
+const BUSY = new Set(["pending", "searching", "downloading"]);
+
 function cardHtml(pl) {
   const ss = plSongs(pl.id);
   const done = ss.filter((s) => s.status === "done");
+  const busy = ss.filter((s) => BUSY.has(s.status)).length;
   const thumbs = done.filter((s) => s.thumb).slice(0, 4);
+  const extras = (pl.id === playingPl ? `<span class="playing-badge">${EQ}正在播放</span>` : "") +
+    (done.length ? `<span class="cover-play">${icon("play")}</span>` : "");
   const cover = thumbs.length
     ? `<div class="cover grid${Math.min(thumbs.length, 4)}">` +
-      thumbs.map((s) => `<img src="/media/thumbs/${s.id}.jpg" alt="">`).join("") + `</div>`
-    : `<div class="cover empty">🎵</div>`;
+      thumbs.map((s) => `<img src="/media/thumbs/${s.id}.jpg" alt="">`).join("") + extras + `</div>`
+    : `<div class="cover empty">${icon("music")}${extras}</div>`;
   return `<div class="pl-card" data-id="${pl.id}">
     ${cover}
     <div class="pl-info">
       <div class="pl-name">${escapeHtml(pl.name)}</div>
-      <div class="pl-sub">${ss.length} 首 · ${done.length} 可播</div>
+      <div class="pl-sub">${ss.length} 首 · ${done.length} 可播${busy ? ` · <span class="busy">${busy} 处理中</span>` : ""}</div>
     </div>
     <div class="pl-ops">
-      <button data-op="rename" title="重命名">✎</button>
-      <button data-op="delpl" title="删除歌单">✕</button>
+      <button data-op="rename" title="重命名">${icon("edit")}</button>
+      <button data-op="delpl" title="删除歌单">${icon("trash")}</button>
     </div>
   </div>`;
 }
@@ -190,17 +254,24 @@ function renderHome() {
     const ss = plSongs(pl.id);
     return [pl.id, pl.name, ss.length,
             ss.filter((s) => s.status === "done").length,
-            ss.filter((s) => s.thumb).slice(0, 4).map((s) => s.id)];
+            ss.filter((s) => BUSY.has(s.status)).length,
+            ss.filter((s) => s.thumb).slice(0, 4).map((s) => s.id), pl.id === playingPl];
   }));
   if (key !== lastHomeKey) {
     lastHomeKey = key;
-    $("pl-grid").innerHTML = playlists.map(cardHtml).join("");
+    $("pl-grid").innerHTML = playlists.map(cardHtml).join("") +
+      (playlists.length ? `<div class="pl-new" role="button" tabindex="0">${icon("plus")}新建歌单</div>` : "");
   }
   $("home-empty").hidden = playlists.length > 0;
+  $("home-label").hidden = playlists.length === 0;
   const np = $("home-nowplaying");
   if (currentId && songsById[currentId]) {
     np.hidden = false;
-    np.textContent = "▶ " + songLabel(songsById[currentId]);
+    const label = songLabel(songsById[currentId]);
+    if (np.dataset.label !== label) {
+      np.dataset.label = label;
+      np.innerHTML = `${EQ}<span class="np-label">${escapeHtml(label)}</span>`;
+    }
   } else {
     np.hidden = true;
   }
@@ -219,14 +290,23 @@ $("new-pl-btn").onclick = async () => {
   if (pl.id) location.hash = "#/p/" + pl.id;
 };
 
+$("home-empty-new").onclick = () => $("new-pl-btn").click();
+
 $("home-nowplaying").onclick = () => {
   if (playingPl) location.hash = "#/p/" + playingPl;
 };
 
 $("pl-grid").addEventListener("click", async (e) => {
+  if (e.target.closest(".pl-new")) { $("new-pl-btn").click(); return; }
   const card = e.target.closest(".pl-card");
   if (!card) return;
   const id = card.dataset.id;
+  if (e.target.closest(".cover-play")) { // 封面上的播放键:进歌单并从第一首开始(已在播则只进入)
+    location.hash = "#/p/" + id;
+    const queue = readyQueue(id);
+    if (playingPl !== id && queue.length) playSong(queue[0].id, id);
+    return;
+  }
   const op = e.target.closest("[data-op]");
   if (op) {
     e.stopPropagation();
@@ -250,7 +330,8 @@ $("pl-grid").addEventListener("click", async (e) => {
 
 function itemKey(s) {
   return [s.status, Math.round(s.progress || 0), s.id === currentId ? 1 : 0,
-          s.thumb ? 1 : 0, shuffleSet.has(viewPl) ? 1 : 0].join("|");
+          s.thumb ? 1 : 0, shuffleSet.has(viewPl) ? 1 : 0,
+          s.title, s.artist, s.error].join("|");
 }
 
 function songHtml(s) {
@@ -259,29 +340,34 @@ function songHtml(s) {
     const pct = Math.round(s.progress || 0);
     statusHtml = `<div class="status busy">下载中 ${pct}%</div>
       <div class="bar"><i style="width:${pct}%"></i></div>`;
+  } else if (s.status === "done") {
+    // 就绪是常态,第二行留给歌手,不再逐行重复「就绪」
+    statusHtml = `<div class="status">${escapeHtml(s.artist || STATUS_TEXT.done[0])}</div>`;
   } else {
     const [text, cls] = STATUS_TEXT[s.status] || [s.status, ""];
     const extra = s.status === "failed" && s.error ? `:${escapeHtml(s.error)}` : "";
-    statusHtml = `<div class="status ${cls}" title="${escapeHtml(s.error || s.video_title || "")}">${text}${extra}</div>`;
+    const who = s.artist && s.status !== "failed" ? `${escapeHtml(s.artist)} · ` : "";
+    statusHtml = `<div class="status ${cls}" title="${escapeHtml(s.error || s.video_title || "")}">${who}${text}${extra}</div>`;
   }
   const active = s.status !== "no_mv" && s.status !== "failed";
   const thumb = s.thumb
-    ? `<img class="thumb" src="/media/thumbs/${s.id}.jpg" alt="">`
-    : `<div class="thumb ph">♪</div>`;
+    ? `<img class="thumb" src="/media/thumbs/${s.id}.jpg" alt="" loading="lazy">`
+    : `<div class="thumb ph">${icon("music")}</div>`;
   const ops = [
     // 随机播放时显示的是临时顺序,不允许调序(会把随机序写进真实歌单)
-    active && !shuffleSet.has(viewPl) ? `<button data-op="up" title="上移">↑</button><button data-op="down" title="下移">↓</button>` : "",
-    !active ? `<button data-op="retry" title="重试">↻</button>` : "",
-    `<button data-op="copy" title="复制歌名和歌手">📋</button>`,
+    active && !shuffleSet.has(viewPl) ? `<button data-op="up" title="上移">${icon("up")}</button><button data-op="down" title="下移">${icon("down")}</button>` : "",
+    !active ? `<button data-op="retry" title="重试">${icon("retry")}</button>` : "",
+    s.status === "review" ? `<button data-op="review" title="从候选视频里选一个">${icon("pick")}</button>` : "",
+    `<button data-op="copy" title="复制歌名和歌手">${icon("copy")}</button>`,
     s.status !== "pending" && s.status !== "searching" && s.status !== "downloading"
-      ? `<button data-op="seturl" title="手动指定视频链接">🔗</button>` : "",
-    `<button data-op="del" title="从歌单移除">✕</button>`,
+      ? `<button data-op="seturl" title="手动指定视频链接">${icon("link")}</button>` : "",
+    `<button data-op="del" title="从歌单移除">${icon("close")}</button>`,
   ].join("");
   return `<li class="song ${s.status} ${s.id === currentId ? "playing" : ""}"
     data-id="${s.id}" ${active && !shuffleSet.has(viewPl) ? 'draggable="true"' : ""}>
-    ${thumb}
+    <div class="art">${thumb}${s.id === currentId ? EQ : ""}</div>
     <div class="meta">
-      <div class="name" title="${escapeHtml(s.video_title || "")}">${escapeHtml(songLabel(s))}</div>
+      <div class="name" title="${escapeHtml(s.video_title || songLabel(s))}">${escapeHtml(s.title)}</div>
       ${statusHtml}
     </div>
     <div class="ops">${ops}</div>
@@ -333,6 +419,11 @@ function renderPlaylist() {
   $("removed-title").hidden = removed.length === 0;
   $("removed-count").textContent = removed.length ? `(${removed.length})` : "";
   $("empty-hint").style.display = currentId ? "none" : "";
+  $("video-wrap").classList.toggle("idle", !currentId);
+  $("hint-main").textContent = ready ? "选一首歌开始播放" : "先在左侧粘贴你的歌单";
+  $("hint-sub").textContent = ready
+    ? "点击左侧就绪的歌曲,或按空格从第一首开始"
+    : "下载完成的 MV 会自动进入播放列表";
 }
 
 function renderAll() {
@@ -388,12 +479,23 @@ function applyVolume() {
 
 /* ---------- 播放控制 ---------- */
 
+// 底栏左侧:封面 + 歌名 + 歌手
+function setNowPlaying(s) {
+  $("now-playing").classList.toggle("idle", !s);
+  $("np-title").textContent = s ? s.title : "未在播放";
+  $("np-artist").textContent = s ? (s.artist || "") : "";
+  $("np-art").innerHTML = s && s.thumb
+    ? `<img src="/media/thumbs/${s.id}.jpg" alt="">` : icon("music");
+}
+
 function stopPlayback() {
   video.pause();
   video.removeAttribute("src");
+  video.controls = false; // 没有视频时不露出空的原生进度条
   currentId = null;
   playingPl = null;
-  $("now-playing").textContent = "未在播放";
+  document.body.classList.remove("is-playing");
+  setNowPlaying(null);
 }
 
 const LANG_NAMES = {
@@ -433,9 +535,10 @@ function playSong(id, plId) {
   ensureAudioGraph();
   applyVolume();
   video.src = "/media/" + encodeURIComponent(s.video_file);
+  video.controls = true;
   attachSubtitles(s);
   video.play().catch(() => {});
-  $("now-playing").textContent = "正在播放:" + songLabel(s);
+  setNowPlaying(s);
   renderAll();
 }
 
@@ -454,8 +557,8 @@ function step(dir) {
 }
 
 video.addEventListener("ended", () => step(1));
-video.addEventListener("play", () => { $("play-btn").textContent = "⏸"; });
-video.addEventListener("pause", () => { $("play-btn").textContent = "▶️"; });
+video.addEventListener("play", () => document.body.classList.add("is-playing"));
+video.addEventListener("pause", () => document.body.classList.remove("is-playing"));
 
 $("play-btn").onclick = () => {
   if (!currentId) { step(1); return; }
@@ -483,7 +586,7 @@ $("fs-btn").onclick = () => {
 
 document.addEventListener("keydown", (e) => {
   if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
-  if ($("modal").open) return; // 对话框打开时不响应播放快捷键
+  if ($("modal").open || $("download-settings").open || $("review-dialog").open) return;
   if (viewPl === null && !currentId) return;
   if (e.code === "Space") { e.preventDefault(); $("play-btn").click(); }
   else if (e.key === "ArrowRight") step(1);
@@ -593,6 +696,8 @@ document.addEventListener("click", async (e) => {
         if (data.error) toast(data.error);
       }
       await refresh();
+    } else if (op === "review") {
+      openReview(id);
     } else if (op === "up") {
       await moveSong(id, -1);
     } else if (op === "down") {
@@ -601,7 +706,63 @@ document.addEventListener("click", async (e) => {
     return;
   }
   if (li.classList.contains("done")) playSong(id, viewPl);
+  else if (li.classList.contains("review")) openReview(id);
 });
+
+/* ---------- 待确认:从候选视频里挑一个 ---------- */
+
+let reviewId = null;
+
+function fmtDuration(sec) {
+  if (!sec) return "";
+  sec = Math.round(sec);
+  return Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
+}
+
+function safeUrl(url) {
+  return /^https:\/\//.test(url || "") ? url : "";
+}
+
+function openReview(id) {
+  const s = songsById[id];
+  if (!s || !s.candidates || !s.candidates.length) return;
+  reviewId = id;
+  $("review-title").textContent = songLabel(s);
+  $("review-list").innerHTML = s.candidates.map((c, i) => `
+    <li>
+      ${safeUrl(c.thumbnail) ? `<img src="${escapeHtml(safeUrl(c.thumbnail))}" alt="" referrerpolicy="no-referrer">` : `<div class="thumb ph">${icon("music")}</div>`}
+      <div class="meta">
+        <div class="name">${escapeHtml(c.title || "")}</div>
+        <div class="sub">${escapeHtml(c.channel || "")}${c.duration ? " · " + fmtDuration(c.duration) : ""}</div>
+      </div>
+      <a class="btn ghost" href="${escapeHtml(safeUrl(c.url))}" target="_blank" rel="noopener">${icon("external")}预览</a>
+      <button type="button" class="btn primary" data-pick="${i}">用这个</button>
+    </li>`).join("");
+  $("review-dialog").showModal();
+}
+
+async function chooseCandidate(url) {
+  const id = reviewId;
+  $("review-dialog").close();
+  const res = await fetch("/api/songs/" + id + "/choose", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url }),
+  });
+  const data = await res.json();
+  if (data.error) toast(data.error);
+  await refresh();
+}
+
+$("review-list").addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-pick]");
+  if (!btn) return;
+  const s = songsById[reviewId];
+  const c = s && s.candidates && s.candidates[+btn.dataset.pick];
+  if (c) chooseCandidate(c.url);
+});
+$("review-none").onclick = () => chooseCandidate(null);
+$("review-close").onclick = () => $("review-dialog").close();
 
 /* ---------- 拖拽排序 ---------- */
 
@@ -660,6 +821,11 @@ async function refresh() {
 
 // 初始开关状态与按钮视觉保持一致
 $("loop-btn").classList.toggle("on", loop);
+setNowPlaying(null);
+
+$("pl-grid").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && e.target.closest(".pl-new")) $("new-pl-btn").click();
+});
 
 setInterval(refresh, 1500);
 refresh().then(route);

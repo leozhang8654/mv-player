@@ -2,25 +2,64 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e0f13">
 <title>MV 播放器</title>
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
+<!-- 图标:描边类继承 .ic 的 stroke,实心类自带 fill -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.83 2.83 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><path d="M8 5.6v12.8a1 1 0 0 0 1.53.85l10.2-6.4a1 1 0 0 0 0-1.7L9.53 4.75A1 1 0 0 0 8 5.6z"/></g></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><rect x="6" y="5" width="4.2" height="14" rx="1.3"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.3"/></g></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><rect x="5" y="5" width="2.4" height="14" rx="1.2"/><path d="M19 6.1v11.8a1 1 0 0 1-1.55.83l-8.6-5.9a1 1 0 0 1 0-1.66l8.6-5.9A1 1 0 0 1 19 6.1z"/></g></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><rect x="16.6" y="5" width="2.4" height="14" rx="1.2"/><path d="M5 6.1v11.8a1 1 0 0 0 1.55.83l8.6-5.9a1 1 0 0 0 0-1.66l-8.6-5.9A1 1 0 0 0 5 6.1z"/></g></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M16 4h4v4"/><path d="M4 20L20 4"/><path d="M20 16v4h-4"/><path d="M14.5 14.5L20 20"/><path d="M4 4l5 5"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 3l3 3-3 3"/><path d="M4 11v-1a4 4 0 0 1 4-4h12"/><path d="M7 21l-3-3 3-3"/><path d="M20 13v1a4 4 0 0 1-4 4H4"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 4H6a2 2 0 0 0-2 2v2M20 8V6a2 2 0 0 0-2-2h-2M4 16v2a2 2 0 0 0 2 2h2M16 20h2a2 2 0 0 0 2-2v-2"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M18 13l-6 6-6-6"/></symbol>
+  <symbol id="i-retry" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></symbol>
+  <symbol id="i-pick" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.2l2.4 2.4 4.6-5.2"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 9V6.5A2.5 2.5 0 0 0 12.5 4h-6A2.5 2.5 0 0 0 4 6.5v6A2.5 2.5 0 0 0 6.5 15H9"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4L12 5.6"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M17 7L7 17M7 7l10 10"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5h6v2M6.5 7l.9 12a1.5 1.5 0 0 0 1.5 1.4h6.2a1.5 1.5 0 0 0 1.5-1.4l.9-12"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></symbol>
+</svg>
+
 <!-- ========== 主页:歌单列表 ========== -->
 <div id="home-view">
   <header id="home-header">
-    <h1>🎬 MV 播放器</h1>
-    <div>
+    <div class="brand">
+      <span class="logo"><svg class="ic"><use href="#i-play"/></svg></span>
+      <h1>MV 播放器</h1>
+    </div>
+    <div class="home-actions">
       <span id="home-nowplaying" hidden></span>
-      <button id="new-pl-btn">＋ 新建歌单</button>
+      <button class="btn download-settings-btn" type="button">
+        <svg class="ic"><use href="#i-sliders"/></svg><span>下载设置</span>
+      </button>
+      <button id="new-pl-btn" class="btn primary">
+        <svg class="ic"><use href="#i-plus"/></svg><span>新建歌单</span>
+      </button>
     </div>
   </header>
+  <div class="section-label" id="home-label" hidden>我的歌单</div>
   <div id="pl-grid"></div>
   <div id="home-empty" hidden>
+    <div class="empty-art"><svg class="ic"><use href="#i-music"/></svg></div>
     <p>还没有歌单</p>
-    <p class="sub">点右上角「新建歌单」,然后把你的歌单粘贴进去</p>
+    <p class="sub">新建一个歌单,然后把歌名粘贴进去,MV 会自动下载</p>
+    <button id="home-empty-new" class="btn primary">
+      <svg class="ic"><use href="#i-plus"/></svg><span>新建歌单</span>
+    </button>
   </div>
 </div>
 
@@ -28,15 +67,18 @@
 <div id="layout" hidden>
   <aside id="sidebar">
     <div id="pl-head">
-      <button id="back-btn" title="返回主页">←</button>
+      <button id="back-btn" class="icon-btn" title="返回主页"><svg class="ic"><use href="#i-back"/></svg></button>
       <h1 id="pl-title"></h1>
-      <button id="pl-rename-btn" title="重命名歌单">✎</button>
+      <button id="pl-rename-btn" class="icon-btn ghost" title="重命名歌单"><svg class="ic"><use href="#i-edit"/></svg></button>
     </div>
 
     <div id="add-box">
-      <textarea id="song-input" rows="4"
+      <textarea id="song-input" rows="3"
         placeholder="每行一首,格式:歌手 - 歌名&#10;或粘贴 YouTube / Bilibili 视频链接直接添加&#10;或粘贴 Apple Music 歌单链接一键导入"></textarea>
-      <button id="add-btn">添加到歌单</button>
+      <div class="add-row">
+        <button id="add-btn" class="btn primary"><svg class="ic"><use href="#i-plus"/></svg><span>添加到歌单</span></button>
+        <button class="btn download-settings-btn square" type="button" title="下载设置 / 检测连接"><svg class="ic"><use href="#i-sliders"/></svg></button>
+      </div>
     </div>
 
     <div class="list-title">播放列表 <span id="ready-count"></span><span id="drag-hint">(拖拽可调顺序)</span></div>
@@ -50,35 +92,85 @@
 
   <main id="player-area">
     <div id="video-wrap">
-      <video id="video" controls playsinline></video>
+      <video id="video" playsinline></video>
       <div id="empty-hint">
-        <p>👈 先在左侧粘贴你的歌单</p>
-        <p class="sub">下载完成的 MV 会自动进入播放列表</p>
+        <div class="empty-art"><svg class="ic"><use href="#i-music"/></svg></div>
+        <p id="hint-main">先在左侧粘贴你的歌单</p>
+        <p class="sub" id="hint-sub">下载完成的 MV 会自动进入播放列表</p>
       </div>
     </div>
     <div id="controls">
-      <div id="now-playing">未在播放</div>
+      <div id="now-playing">
+        <div id="np-art"><svg class="ic"><use href="#i-music"/></svg></div>
+        <div id="np-text">
+          <div id="np-title">未在播放</div>
+          <div id="np-artist"></div>
+        </div>
+      </div>
       <div id="buttons">
-        <button id="prev-btn" title="上一首 (←)">⏮</button>
-        <button id="play-btn" title="播放/暂停 (空格)">▶️</button>
-        <button id="next-btn" title="下一首 (→)">⏭</button>
-        <button id="shuffle-btn" class="toggle" title="随机播放">🔀</button>
-        <button id="loop-btn" class="toggle" title="列表循环">🔁</button>
-        <button id="fs-btn" title="全屏 (F)">⛶</button>
+        <button id="shuffle-btn" class="toggle" title="随机播放"><svg class="ic"><use href="#i-shuffle"/></svg></button>
+        <button id="prev-btn" title="上一首 (←)"><svg class="ic"><use href="#i-prev"/></svg></button>
+        <button id="play-btn" title="播放/暂停 (空格)">
+          <svg class="ic i-play"><use href="#i-play"/></svg>
+          <svg class="ic i-pause"><use href="#i-pause"/></svg>
+        </button>
+        <button id="next-btn" title="下一首 (→)"><svg class="ic"><use href="#i-next"/></svg></button>
+        <button id="loop-btn" class="toggle" title="列表循环"><svg class="ic"><use href="#i-repeat"/></svg></button>
+      </div>
+      <div id="controls-right">
+        <button id="fs-btn" title="全屏 (F)"><svg class="ic"><use href="#i-expand"/></svg></button>
       </div>
     </div>
   </main>
 </div>
 
+<dialog id="download-settings" class="dialog">
+  <form id="download-settings-form">
+    <h2>下载设置</h2>
+    <p>选择这台 Mac 上已登录 YouTube 的浏览器。下载时优先使用该账号；登录状态读取失败时尝试下载公开内容。</p>
+    <label for="download-browser">YouTube 账号来源</label>
+    <select id="download-browser">
+      <option value="chrome">Chrome（已登录的 YouTube 账号）</option>
+      <option value="edge">Edge</option>
+      <option value="safari">Safari</option>
+      <option value="firefox">Firefox</option>
+      <option value="none">不使用账号</option>
+    </select>
+    <label for="download-profile">浏览器配置名称（可选）</label>
+    <input id="download-profile" placeholder="留空自动选择；例如 Default 或 Profile 1" maxlength="80" autocomplete="off">
+    <p class="hint">Chrome 有多个配置时，可在 chrome://version 查看“个人资料路径”的最后一段。无需输入密码。</p>
+    <p class="hint">普通免费账号即可，不需要 YouTube 会员（Premium）。登录只是为了减少人机验证、能下载年龄限制的视频；会员的离线下载内容只能在 YouTube 内播放，无法导入本播放器。</p>
+    <label class="check-row"><input type="checkbox" id="download-allow-variant">
+      找不到这一版(Remix / Live / 特别版等)的 MV 时，用原版 MV 代替</label>
+    <div id="download-check-result" role="status" aria-live="polite"></div>
+    <div class="download-settings-actions">
+      <button type="button" class="btn ghost" id="download-settings-close">关闭</button>
+      <button type="submit" class="btn" id="download-settings-save">保存</button>
+      <button type="button" class="btn primary" id="download-settings-check">保存并检测连接</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 待确认:从候选视频里挑一个 -->
+<dialog id="review-dialog" class="dialog">
+  <h2 id="review-title"></h2>
+  <p class="sub">这些视频像是这首歌，但不够确定。点「预览」在 YouTube 打开看看，再选一个。</p>
+  <ul id="review-list"></ul>
+  <div class="review-actions">
+    <button type="button" class="btn ghost" id="review-close" autofocus>稍后再说</button>
+    <button type="button" class="btn" id="review-none">都不是</button>
+  </div>
+</dialog>
+
 <!-- 通用对话框(替代浏览器 prompt/confirm,避免被拦截) -->
-<dialog id="modal">
+<dialog id="modal" class="dialog">
   <form id="modal-form">
     <div id="modal-title"></div>
     <div id="modal-msg" hidden></div>
     <input id="modal-input" type="text" autocomplete="off">
     <div id="modal-btns">
-      <button type="button" id="modal-cancel">取消</button>
-      <button type="submit" id="modal-ok">确定</button>
+      <button type="button" class="btn ghost" id="modal-cancel">取消</button>
+      <button type="submit" class="btn primary" id="modal-ok">确定</button>
     </div>
   </form>
 </dialog>
