@@ -80,8 +80,9 @@ jobs:
 
   release:
     needs: [macos, windows]
-    # 某个平台失败时,其余平台的安装包照样发布
-    if: ${{ !cancelled() && (github.event_name == 'push' || inputs.publish) && (needs.macos.result == 'success' || needs.windows.result == 'success') }}
+    # 所有平台都构建成功才发布:README 的「下载最新版」链接依赖每个安装包都在最新版本里。
+    # 某个平台偶发失败时,在 Actions 页面「Re-run failed jobs」即可。
+    if: ${{ github.event_name == 'push' || inputs.publish }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

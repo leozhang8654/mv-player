@@ -42,7 +42,8 @@ BIN="$BACKEND/bin"
 mkdir -p "$BIN"
 
 echo "▸ 2/6 下载附带工具"
-fetch() { curl -fsSL --retry 3 -o "$1" "$2"; }
+# 构建机偶尔会 DNS 解析失败:所有错误都重试,间隔拉长
+fetch() { curl -fsSL --retry 6 --retry-delay 15 --retry-all-errors -o "$1" "$2"; }
 fetch "$BIN/yt-dlp" "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos"
 for tool in ffmpeg ffprobe; do
     fetch "$WORK/$tool.zip" "https://ffmpeg.martin-riedl.de/redirect/latest/macos/$FF_ARCH/release/$tool.zip"

@@ -17,9 +17,9 @@ $Python = if ($env:PYTHON) { $env:PYTHON } else { "python" }
 
 function Check($what) { if ($LASTEXITCODE -ne 0) { throw "$what 失败(退出码 $LASTEXITCODE)" } }
 function Fetch($url, $out) {
-    for ($i = 1; $i -le 3; $i++) {
+    for ($i = 1; $i -le 6; $i++) {
         try { Invoke-WebRequest -Uri $url -OutFile $out -UseBasicParsing; return }
-        catch { if ($i -eq 3) { throw } ; Start-Sleep -Seconds 5 }
+        catch { if ($i -eq 6) { throw } ; Start-Sleep -Seconds 15 }
     }
 }
 
