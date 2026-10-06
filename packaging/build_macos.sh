@@ -103,21 +103,13 @@ echo "▸ 5/6 签名(ad-hoc)"
 codesign --force --deep --sign - --timestamp=none "$APP"
 codesign --verify --deep --strict "$APP"
 
-echo "▸ 6/6 制作 DMG"
-STAGE="$WORK/dmg"
-mkdir -p "$STAGE"
-cp -R "$APP" "$STAGE/"
-ln -s /Applications "$STAGE/应用程序"
-cat > "$STAGE/首次打开必读.txt" <<'TXT'
-1. 把「MV播放器」拖进「应用程序」文件夹。
-2. 本应用未经 Apple 公证,首次打开会被拦截。打开「终端」执行下面这行后再双击即可:
-
-   xattr -dr com.apple.quarantine /Applications/MV播放器.app
-
-   或者:双击被拦截后,到「系统设置 → 隐私与安全性」底部点「仍要打开」。
-3. 曲库和下载的视频保存在「影片 / MV播放器」文件夹。
-TXT
+echo "▸ 6/6 制作 DMG(带背景与拖拽箭头的安装窗口)"
+"$WORK/venv/bin/pip" install -q dmgbuild
 DMG="$DIST/MVPlayer-macOS-$LABEL.dmg"
 rm -f "$DMG"
-hdiutil create -quiet -volname "MV 播放器" -srcfolder "$STAGE" -ov -format UDZO "$DMG"
+"$WORK/venv/bin/dmgbuild" -s "$ROOT/packaging/dmg/settings.py" \
+    -D app="$APP" \
+    -D readme="$ROOT/packaging/dmg/首次打开必读.txt" \
+    -D background="$ROOT/packaging/dmg/background.png" \
+    "MV 播放器" "$DMG"
 echo "✓ $DMG ($(du -h "$DMG" | cut -f1))"

@@ -52,19 +52,6 @@
 
 ## 📦 下载安装
 
-### macOS:推荐一键安装
-
-打开「终端」(启动台搜索「终端」),粘贴下面这行并回车:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/leozhang8654/mv-player/main/install-macos.sh | bash
-```
-
-会自动选择 Apple 芯片 / Intel 版本、校验文件、装进「应用程序」并打开。
-这种方式不会触发「无法验证开发者」拦截,也不用去系统设置里点「仍要打开」。以后再执行一次即升级到最新版。
-
-### 手动下载
-
 前往 [**最新版本**](https://github.com/leozhang8654/mv-player/releases/latest) 下载对应安装包:
 
 | 系统 | 安装包 | 要求 |
@@ -76,22 +63,29 @@ curl -fsSL https://raw.githubusercontent.com/leozhang8654/mv-player/main/install
 
 安装包已附带全部所需组件(yt-dlp、FFmpeg、Deno),无需另外安装;下载组件 yt-dlp 会每天自动更新。
 
+### macOS 安装步骤
+
+1. 打开下载的 DMG,在弹出的安装窗口里把「MV播放器」拖到右边的「应用程序」文件夹。
+2. **首次打开前**,打开「终端」(启动台或聚焦搜索「终端」),粘贴下面这行并回车(只需做一次):
+
+   ```bash
+   xattr -dr com.apple.quarantine /Applications/MV播放器.app
+   ```
+
+   没有任何输出就表示成功。DMG 里的「首次打开必读」也写着这条命令,可以直接复制。
+3. 在「应用程序」里双击「MV播放器」即可打开。
+
+> **为什么需要第 2 步?** 本应用未经 Apple 公证。从 macOS 15.1 起,系统设置里的「仍要打开」对这类应用
+> 不再起作用(点了没有反应),只能用这条命令解除下载时附加的隔离标记。命令只作用于 MV 播放器本身。
+>
+> 也可以用一条命令自动完成下载、安装和这一步:
+> `curl -fsSL https://raw.githubusercontent.com/leozhang8654/mv-player/main/install-macos.sh | bash`
+
 <details>
-<summary><b>macOS 手动安装:提示「无法验证开发者」、点「仍要打开」没反应怎么办?</b></summary>
+<summary><b>macOS:打开后图标一直跳动、窗口打不开?</b></summary>
 
-本应用未经 Apple 公证,用浏览器下载的安装包会被 macOS 拦截,系统设置里的「仍要打开」有时点了也没反应。
-最简单的办法是改用上面的**一键安装**。
-
-已经手动装好的话:确认 App 已拖进「应用程序」文件夹,然后打开「终端」执行一次:
-
-```bash
-xattr -dr com.apple.quarantine /Applications/MV播放器.app
-```
-
-之后双击即可正常打开。
-
-**点了「仍要打开」后图标一直跳动、打不开?** 1.0.0 版的已知问题(1.0.1 已修复):附带的后台程序被 macOS
-再次拦截。请升级到最新版,或执行上面的 `xattr` 命令后重新打开。不要直接在下载文件夹或安装盘里运行 App。
+1.0.0 版的已知问题,1.0.1 起已修复。请下载最新版重新安装,并按上面第 2 步执行命令。
+另外不要直接在下载文件夹或 DMG 安装窗口里运行 App,先拖进「应用程序」。
 
 </details>
 

@@ -157,6 +157,10 @@ launchctl kickstart -k gui/$(id -u)/com.leozhang.mv-player     # 重启服务
 | macOS(在对应架构的 Mac 上运行) | `packaging/build_macos.sh <版本>` | `dist/MVPlayer-macOS-AppleSilicon.dmg` / `-Intel.dmg` |
 | Windows(PowerShell 7) | `packaging\build_windows.ps1 -Version <版本>` | `dist\MVPlayer-Windows-x64-Setup.exe`、`dist\MVPlayer-Windows-x64.zip` |
 
+macOS 的 DMG 用 [dmgbuild](https://github.com/dmgbuild/dmgbuild) 生成带背景和拖拽箭头的安装窗口
+(布局见 `packaging/dmg/settings.py`,背景由 `packaging/dmg/make_background.py` 生成,
+窗口里附带 `首次打开必读.txt`)。
+
 安装包内容:PyInstaller 打包的后端(`launcher.py` 为入口)+ 附带的 yt-dlp、ffmpeg、ffprobe、deno。
 启动时数据放在用户目录(macOS `~/Movies/MV播放器`,Windows `%USERPROFILE%\Videos\MV播放器`),
 yt-dlp 复制到数据目录后每天自动更新。脚本最后会运行 `--smoke` 自检。
