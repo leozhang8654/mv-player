@@ -100,6 +100,22 @@ func which(_ tool: String) -> String? {
     return nil
 }
 
+/// 文件是否带 macOS 的「来自互联网」隔离标记
+func hasQuarantine(_ path: String) -> Bool {
+    getxattr(path, "com.apple.quarantine", nil, 0, 0, 0) >= 0
+}
+
+/// 递归去掉隔离标记(App 在只读位置运行时会失败,调用方再用 hasQuarantine 检查)
+func clearQuarantine(_ path: String) {
+    let p = Process()
+    p.executableURL = URL(fileURLWithPath: "/usr/bin/xattr")
+    p.arguments = ["-dr", "com.apple.quarantine", path]
+    p.standardOutput = FileHandle.nullDevice
+    p.standardError = FileHandle.nullDevice
+    try? p.run()
+    p.waitUntilExit()
+}
+
 // MARK: - 后台服务
 
 final class Server {
@@ -108,9 +124,15 @@ final class Server {
     var isOurs: Bool { child?.isRunning == true }
 
     enum Failure: LocalizedError {
-        case noProject(String), noPython(String), didNotStart(String)
+        case noProject(String), noPython(String), didNotStart(String), quarantined(String)
         var errorDescription: String? {
             switch self {
+            case .quarantined(let app) where app.contains("/AppTranslocation/"):
+                return "请先把「MV播放器」拖进「应用程序」文件夹,再从那里打开。\n"
+                    + "(直接从下载文件夹或安装盘里运行时,macOS 不允许它启动附带的后台程序。)"
+            case .quarantined(let app):
+                return "macOS 拦截了附带的后台程序。请打开「终端」执行下面这行,然后重新打开:\n\n"
+                    + "xattr -dr com.apple.quarantine \"\(app)\""
             case .noProject(let p):  return "找不到项目文件夹:\n\(p)/app.py 不存在。"
             case .noPython(let p):   return "找不到 Python:\n\(p) 不可执行,虚拟环境可能被删了。"
             case .didNotStart(let s): return "后台服务启动失败。\(s)"
@@ -124,7 +146,13 @@ final class Server {
 
         let p = Process()
         if let server = Cfg.bundledServer {
-            // 发布版:直接运行附带的后端,工具链(yt-dlp/ffmpeg/deno)也在包里
+            // 发布版:直接运行附带的后端,工具链(yt-dlp/ffmpeg/deno)也在包里。
+            // 浏览器下载的 App 里每个文件都带「隔离」标记;用户点「仍要打开」同意的只是 App 本身,
+            // 附带的后端是单独的程序,macOS 会再拦一次,而且是卡在启动处、不报错(界面一直打不开)。
+            // 所以启动前先去掉包内后端的标记 —— 等同于 README 里让用户手动执行的 xattr 命令。
+            let backend = (server as NSString).deletingLastPathComponent
+            clearQuarantine(backend)
+            if hasQuarantine(server) { throw Failure.quarantined(Bundle.main.bundlePath) }
             try? FileManager.default.createDirectory(atPath: Cfg.dataDir, withIntermediateDirectories: true)
             p.executableURL = URL(fileURLWithPath: server)
             p.arguments = ["--no-browser", "--data-dir", Cfg.dataDir, "--port", String(Cfg.port)]
