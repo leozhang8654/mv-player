@@ -116,7 +116,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         openBrowser.keyEquivalentModifierMask = [.command, .shift]
         helpMenu.addItem(withTitle: "拷贝手机访问地址", action: #selector(copyLANAddress), keyEquivalent: "")
         helpMenu.addItem(.separator())
-        helpMenu.addItem(withTitle: "打开项目文件夹", action: #selector(openProjectFolder), keyEquivalent: "")
+        helpMenu.addItem(withTitle: Cfg.isBundled ? "打开曲库文件夹" : "打开项目文件夹",
+                         action: #selector(openProjectFolder), keyEquivalent: "")
         helpMenu.addItem(withTitle: "查看服务日志", action: #selector(openLog), keyEquivalent: "")
         helpItem.submenu = helpMenu
 
@@ -141,7 +142,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc private func openInBrowser() { NSWorkspace.shared.open(Cfg.home) }
 
     @objc private func openProjectFolder() {
-        NSWorkspace.shared.open(URL(fileURLWithPath: Cfg.projectRoot))
+        NSWorkspace.shared.open(URL(fileURLWithPath: Cfg.isBundled ? Cfg.dataDir : Cfg.projectRoot))
     }
 
     @objc private func openLog() {

@@ -20,3 +20,11 @@ desktop/build/
 
 # 搜索结果缓存(离线评估用,tools/eval_mv.py)
 search-cache/
+
+# 打包产物
+build/
+dist/
+
+# 个人曲库数据(每台电脑各自的歌单与下载状态)
+library.json
+library.json.tmp

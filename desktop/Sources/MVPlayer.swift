@@ -1,7 +1,9 @@
 // MV 播放器 —— macOS 原生外壳
 //
-// 真正干活的还是项目里的 Flask 服务(app.py),这层只负责把它包成一个 App:
-//   1. 双击启动时确保本地服务在跑(已由 launchd 常驻则直接复用,不重复起)
+// 真正干活的还是 Flask 服务(app.py),这层只负责把它包成一个 App:
+//   1. 双击启动时确保本地服务在跑(已由 launchd 常驻则直接复用,不重复起)。
+//      两种模式:开发版指向项目文件夹(Info.plist 的 MVProjectRoot);
+//      发布版的后端随 App 附带(Contents/Resources/backend),数据放 ~/Movies/MV播放器
 //   2. 用 WKWebView 开原生窗口显示界面,而不是丢进浏览器标签页
 //   3. 补回浏览器白送的东西:菜单栏、⌘V 粘贴、全屏、缩放、窗口位置记忆
 
@@ -12,11 +14,27 @@ import Darwin
 // MARK: - 配置
 
 enum Cfg {
-    static let port: UInt16 = 8471
-    static let home = URL(string: "http://127.0.0.1:8471/")!
+    /// 端口:默认 8471,可用环境变量 MV_PORT 改(测试时避免和已在运行的服务冲突)
+    static let port: UInt16 = UInt16(ProcessInfo.processInfo.environment["MV_PORT"] ?? "") ?? 8471
+    static var home: URL { URL(string: "http://127.0.0.1:\(port)/")! }
     static let bg = NSColor(srgbRed: 0x0e / 255.0, green: 0x0f / 255.0, blue: 0x13 / 255.0, alpha: 1)
     static let launchdLabel = "com.leozhang.mv-player"
-    static let logPath = NSHomeDirectory() + "/Library/Logs/mv-player-app.log"
+    static var logPath: String {
+        NSHomeDirectory() + (isBundled ? "/Library/Logs/MV播放器.log" : "/Library/Logs/mv-player-app.log")
+    }
+
+    /// 发布版附带的后端可执行文件;开发版没有,返回 nil
+    static var bundledServer: String? {
+        guard let res = Bundle.main.resourcePath else { return nil }
+        let p = res + "/backend/MVPlayerServer"
+        return FileManager.default.isExecutableFile(atPath: p) ? p : nil
+    }
+    static var isBundled: Bool { bundledServer != nil }
+
+    /// 发布版的曲库/视频目录(可用 MV_DATA_DIR 覆盖)
+    static var dataDir: String {
+        ProcessInfo.processInfo.environment["MV_DATA_DIR"] ?? NSHomeDirectory() + "/Movies/MV播放器"
+    }
 
     /// 项目目录:打包时写进 Info.plist 的 MVProjectRoot,兜底 ~/MV播放器
     static var projectRoot: String {
@@ -104,6 +122,24 @@ final class Server {
     func ensureRunning() throws {
         if portIsOpen(Cfg.port) { return }
 
+        let p = Process()
+        if let server = Cfg.bundledServer {
+            // 发布版:直接运行附带的后端,工具链(yt-dlp/ffmpeg/deno)也在包里
+            try? FileManager.default.createDirectory(atPath: Cfg.dataDir, withIntermediateDirectories: true)
+            p.executableURL = URL(fileURLWithPath: server)
+            p.arguments = ["--no-browser", "--data-dir", Cfg.dataDir, "--port", String(Cfg.port)]
+            p.currentDirectoryURL = URL(fileURLWithPath: Cfg.dataDir)
+            var env = ProcessInfo.processInfo.environment
+            env["PYTHONUNBUFFERED"] = "1"
+            p.environment = env
+        } else {
+            try configureDevServer(p)
+        }
+        try launch(p)
+    }
+
+    /// 开发版:用项目里的 .venv 跑 app.py
+    private func configureDevServer(_ p: Process) throws {
         let root = Cfg.projectRoot
         guard FileManager.default.fileExists(atPath: root + "/app.py") else {
             throw Failure.noProject(root)
@@ -112,7 +148,6 @@ final class Server {
         let python = FileManager.default.isExecutableFile(atPath: venv) ? venv : "/usr/bin/python3"
         guard FileManager.default.isExecutableFile(atPath: python) else { throw Failure.noPython(venv) }
 
-        let p = Process()
         p.executableURL = URL(fileURLWithPath: python)
         p.arguments = ["app.py"]
         p.currentDirectoryURL = URL(fileURLWithPath: root)
@@ -120,7 +155,9 @@ final class Server {
         env["PATH"] = "/opt/homebrew/bin:/usr/local/bin:" + (env["PATH"] ?? "/usr/bin:/bin")
         env["PYTHONUNBUFFERED"] = "1"
         p.environment = env
+    }
 
+    private func launch(_ p: Process) throws {
         FileManager.default.createFile(atPath: Cfg.logPath, contents: nil)
         if let log = FileHandle(forWritingAtPath: Cfg.logPath) {
             log.seekToEndOfFile()
@@ -130,8 +167,9 @@ final class Server {
         do { try p.run() } catch { throw Failure.didNotStart(error.localizedDescription) }
         child = p
 
-        // 等端口起来,最多 25 秒(首次可能要迁移 library.json)
-        for _ in 0..<125 {
+        // 等端口起来:开发版最多 25 秒(首次可能要迁移 library.json);
+        // 发布版首次运行 macOS 要校验附带的程序,给到 90 秒
+        for _ in 0..<(Cfg.isBundled ? 450 : 125) {
             if portIsOpen(Cfg.port) { return }
             if !p.isRunning { break }
             Thread.sleep(forTimeInterval: 0.2)
@@ -152,7 +190,7 @@ final class Server {
         if isOurs {
             stopIfOurs()
             Thread.sleep(forTimeInterval: 0.6)
-        } else {
+        } else if !Cfg.isBundled {
             let t = Process()
             t.executableURL = URL(fileURLWithPath: "/bin/launchctl")
             t.arguments = ["kickstart", "-k", "gui/\(getuid())/\(Cfg.launchdLabel)"]
@@ -319,6 +357,13 @@ final class MainWindowController: NSWindowController, WKNavigationDelegate, WKUI
 
     private func showBootError(_ error: Error) {
         var detail = error.localizedDescription
+        if Cfg.isBundled {
+            detail += "\n\n日志:\(Cfg.logPath)"
+            status.showError("没能启动后台服务", detail: detail, action: "重试") { [weak self] in
+                self?.boot()
+            }
+            return
+        }
         var missing: [String] = []
         if which("yt-dlp") == nil { missing.append("yt-dlp") }
         if which("ffmpeg") == nil { missing.append("ffmpeg") }
