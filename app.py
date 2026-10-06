@@ -21,14 +21,15 @@ from flask import Flask, jsonify, request, send_from_directory
 
 import catalog
 import downloader
+import paths
 
-BASE = os.path.dirname(os.path.abspath(__file__))
-MEDIA_DIR = os.path.join(BASE, "media")
+BASE = paths.CODE_DIR          # 程序文件(static/ 等)
+MEDIA_DIR = os.path.join(paths.DATA_DIR, "media")
 THUMB_DIR = os.path.join(MEDIA_DIR, "thumbs")
 SUBS_DIR = os.path.join(MEDIA_DIR, "subs")
-LIBRARY = os.path.join(BASE, "library.json")
+LIBRARY = os.path.join(paths.DATA_DIR, "library.json")
 SOURCES = ["youtube", "bilibili"]
-PORT = 8471
+PORT = int(os.environ.get("MV_PORT") or 8471)
 
 os.makedirs(THUMB_DIR, exist_ok=True)
 os.makedirs(SUBS_DIR, exist_ok=True)
@@ -339,7 +340,7 @@ def measure_loudness(video_file):
     try:
         proc = subprocess.run(
             ["ffmpeg", "-i", src, "-vn", "-af", "volumedetect", "-f", "null", "-"],
-            capture_output=True, text=True, timeout=120,
+            capture_output=True, encoding="utf-8", errors="replace", timeout=120,
         )
         m = re.search(r"mean_volume:\s*(-?[\d.]+) dB", proc.stderr)
         if m:
@@ -1018,7 +1019,7 @@ def lan_ip():
         s.close()
 
 
-if __name__ == "__main__":
+def main():
     load_state()
     migrate_filenames()
     migrate_zh_subs()
@@ -1030,3 +1031,7 @@ if __name__ == "__main__":
     if ip:
         print("同一 Wi-Fi 的手机/iPad 访问:  http://%s:%d" % (ip, PORT))
     app.run(host="0.0.0.0", port=PORT, threaded=True)
+
+
+if __name__ == "__main__":
+    main()

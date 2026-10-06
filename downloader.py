@@ -14,11 +14,15 @@ import unicodedata
 import urllib.parse
 from urllib.parse import urlparse
 
-YTDLP = "yt-dlp"
+import paths
+
+# 子进程输出一律按 UTF-8 解码(Windows 默认是 GBK),坏字节替换掉而不是报错
+TEXT = {"encoding": "utf-8", "errors": "replace"}
+YTDLP = os.environ.get("MV_YTDLP") or "yt-dlp"   # 打包版指向随包附带、可自更新的 yt-dlp
 SEARCH_COUNT = 8
 ACCEPT_THRESHOLD = 8
 
-SETTINGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "download-settings.json")
+SETTINGS_FILE = os.path.join(paths.DATA_DIR, "download-settings.json")
 SETTINGS_LOCK = threading.RLock()
 DEFAULT_SETTINGS = {"browser": "chrome", "profile": "", "allow_variant": True}
 account_warning = ""
@@ -90,7 +94,8 @@ def error_message(text):
 
 
 def _command(target, authenticated=True):
-    cmd = [YTDLP, "--ignore-config", "--no-color", "--socket-timeout", "20",
+    # --encoding utf-8:Windows 中文系统默认 GBK 输出,统一成 UTF-8 再解析
+    cmd = [YTDLP, "--ignore-config", "--no-color", "--encoding", "utf-8", "--socket-timeout", "20",
            "--extractor-retries", "2", "--retries", "3"]
     if _is_youtube(target):
         deno = shutil.which("deno")
@@ -109,11 +114,11 @@ def _run(target, args, timeout=90):
     """账号优先；仅登录数据不可读时尝试公开内容，并保留提示。"""
     global account_warning
     cmd = _command(target)
-    proc = subprocess.run(cmd + args + [target], capture_output=True, text=True, timeout=timeout)
+    proc = subprocess.run(cmd + args + [target], capture_output=True, timeout=timeout, **TEXT)
     if proc.returncode and "--cookies-from-browser" in cmd and _cookie_error(proc.stderr):
         account_warning = error_message(proc.stderr) + " 当前已尝试未登录下载。"
         proc = subprocess.run(_command(target, False) + args + [target],
-                              capture_output=True, text=True, timeout=timeout)
+                              capture_output=True, timeout=timeout, **TEXT)
     return proc
 
 
@@ -552,7 +557,7 @@ SEARCH_PREFIX = {"youtube": "ytsearch", "bilibili": "bilisearch"}
 
 
 # ---------- 搜索结果缓存(离线回归测试用) ----------
-CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "search-cache")
+CACHE_DIR = os.path.join(paths.DATA_DIR, "search-cache")
 # record:正常联网并记录;replay:只读缓存(缺失视为无结果);online:读缓存,缺失再联网并记录
 CACHE_MODE = "record"
 LIVE_CALLS = 0  # 实际联网次数(评估工具据此决定要不要放慢)
@@ -896,7 +901,7 @@ def cleanup_song_files(media_dir, song_id, keep=None, keep_subs=False):
 def _stream_download(cmd, progress_cb):
     """执行下载命令,流式解析进度,返回 (退出码, 输出尾部)。"""
     proc = subprocess.Popen(
-        cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, **TEXT
     )
     tail = []
     for line in proc.stdout:
@@ -919,7 +924,7 @@ def _find_output(media_dir, song_id, code):
     try:
         probe = subprocess.run(
             ["ffprobe", "-v", "error", "-show_entries", "stream=codec_type", "-of", "json", path],
-            capture_output=True, text=True, timeout=30)
+            capture_output=True, timeout=30, **TEXT)
         kinds = {s.get("codec_type") for s in json.loads(probe.stdout).get("streams", [])}
         if probe.returncode or not {"audio", "video"}.issubset(kinds):
             return None

@@ -1,0 +1,3 @@
+# 运行依赖(下载工具 yt-dlp / ffmpeg / deno 另装,或用安装包里附带的)
+flask>=3.0
+opencc-python-reimplemented>=0.1.7
